@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proposta Athos Pay - Otimização Tributária</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        athos: {
+                            orange: '#F26522',
+                            dark: '#0f172a', /* slate-900 */
+                            light: '#fff7ed',
+                            salmon: '#f87171', /* red-400 */
+                            tableGray: '#94a3b8' /* slate-400 */
+                        }
+                    },
+                    boxShadow: {
+                        'soft': '0 10px 40px -10px rgba(0,0,0,0.08)',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        
+        /* Remove arrows from number inputs */
+        input[type=number] { -moz-appearance: textfield; }
+        input[type=number]::-webkit-outer-spin-button,
+        input[type=number]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+        
+        /* Custom Scrollbar for tables */
+        .table-container::-webkit-scrollbar { height: 6px; }
+        .table-container::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 4px; }
+        .table-container::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        .table-container::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        
+        /* Smooth transitions */
+        .value-animate { transition: all 0.3s ease-in-out; }
+        
+        /* Table Styles */
+        table { border-collapse: separate; border-spacing: 0; width: 100%; }
+        th, td { border: 1px solid #e2e8f0; }
+        thead th { border-bottom-width: 2px; }
+        
+        /* Floating WhatsApp Button */
+        .float-wpp {
+            position: fixed;
+            width: 60px;
+            height: 60px;
+            bottom: 20px;
+            right: 20px;
+            background-color: #25d366;
+            color: #FFF;
+            border-radius: 50px;
+            text-align: center;
+            font-size: 30px;
+            box-shadow: 0px 4px 10px rgba(0,0,0,0.3);
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s;
+        }
+        .float-wpp:hover { transform: scale(1.1); color: #fff; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased selection:bg-athos-orange selection:text-white">
+
+    <!-- Cabeçalho (Hero) -->
+    <header class="bg-gradient-to-br from-athos-dark via-slate-800 to-slate-900 text-white py-16 px-4 shadow-xl text-center relative overflow-hidden">
+        <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-athos-orange to-yellow-400"></div>
+        <!-- Efeito de fundo -->
+        <div class="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] mix-blend-overlay"></div>
+        
+        <div class="max-w-4xl mx-auto relative z-10 flex flex-col items-center">
+            <div class="bg-white/10 px-4 py-1.5 rounded-full text-sm font-semibold tracking-wide text-athos-orange mb-6 border border-athos-orange/30 backdrop-blur-sm inline-block">
+                Proposta Exclusiva
+            </div>
+            <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold mb-6 tracking-tight leading-tight">
+                Otimização Financeira <br class="hidden md:block">
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-athos-orange to-yellow-400">e Tributária</span>
+            </h1>
+            <p class="text-lg md:text-xl text-slate-300 max-w-2xl mx-auto font-light leading-relaxed">
+                Proteja a sua margem de lucro com a gestão inteligente de recebíveis através da <strong>ferramenta Split de Recebíveis</strong> da Athos Pay.
+            </p>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 py-12 md:py-16">
+        
+        <!-- O Problema x A Solução (Cards) -->
+        <section class="grid md:grid-cols-2 gap-6 md:gap-8 mb-16">
+            <div class="bg-white p-8 md:p-10 rounded-3xl shadow-soft border border-slate-100 relative overflow-hidden group hover:shadow-lg transition duration-300">
+                <div class="absolute top-0 left-0 w-2 h-full bg-red-500"></div>
+                <div class="w-14 h-14 bg-red-50 text-red-500 rounded-2xl flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition-transform">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <h2 class="text-2xl font-bold mb-4 text-slate-800">O Modelo Atual <span class="text-red-500 text-lg font-semibold block mt-1">(Bitributação)</span></h2>
+                <p class="text-slate-600 leading-relaxed">
+                    Atualmente, você paga impostos sobre <strong>100%</strong> do que entra na sua máquina, mesmo quando parte desse valor pertence a fornecedores ou profissionais parceiros. O seu dinheiro é taxado duas vezes, reduzindo drasticamente o seu lucro líquido real.
+                </p>
+            </div>
+            
+            <div class="bg-white p-8 md:p-10 rounded-3xl shadow-soft border border-slate-100 relative overflow-hidden group hover:shadow-lg transition duration-300">
+                <div class="absolute top-0 left-0 w-2 h-full bg-athos-orange"></div>
+                <div class="w-14 h-14 bg-orange-50 text-athos-orange rounded-2xl flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition-transform">
+                    <i class="fas fa-shield-halved"></i>
+                </div>
+                <h2 class="text-2xl font-bold mb-4 text-slate-800">A Solução <span class="text-athos-orange text-lg font-semibold block mt-1">(Athos Pay)</span></h2>
+                <p class="text-slate-600 leading-relaxed">
+                    Nossa tecnologia dá ao seu Estabelecimento a liberdade de dividir (splitar) a sua Unidade de Recebíveis (UR) para terceiros <strong>antes da liquidação</strong>. Assim, cada um paga apenas o imposto devido sobre a sua parte. Liberdade tributária 100% dentro da legalidade.
+                </p>
+            </div>
+        </section>
+
+        <!-- NOVO SIMULADOR BASEADO NO C.E.T. -->
+        <section class="mb-16">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl md:text-4xl font-extrabold text-athos-dark mb-4 tracking-tight">
+                    Simulador de <span class="text-athos-orange">C.E.T.</span>
+                </h2>
+                <p class="text-slate-500 max-w-2xl mx-auto">Descubra exatamente de onde vem o seu lucro mensal comparando o Custo Efetivo Total da sua operação atual com a Athos Pay.</p>
+            </div>
+            
+            <div class="grid lg:grid-cols-12 gap-8 items-start">
+                
+                <!-- PAINEL DE CONTROLES (Inputs) -->
+                <div class="lg:col-span-4 bg-white p-6 md:p-8 rounded-3xl shadow-soft border border-slate-200 lg:sticky lg:top-8">
+                    <div class="flex items-center gap-3 mb-6 pb-4 border-b border-slate-100">
+                        <div class="w-10 h-10 bg-slate-100 text-slate-600 rounded-full flex items-center justify-center"><i class="fas fa-sliders-h"></i></div>
+                        <h3 class="font-bold text-xl text-slate-800">Seus Números</h3>
+                    </div>
+                    
+                    <div class="space-y-6">
+                        <!-- Volume Transacionado -->
+                        <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100">
+                            <p class="font-bold text-sm text-slate-700 mb-3 flex items-center gap-2"><i class="fas fa-wallet text-athos-orange"></i> Volume Mensal (TPV)</p>
+                            <div class="space-y-3">
+                                <div class="relative">
+                                    <label class="text-xs font-semibold text-slate-500 absolute -top-2 left-3 bg-slate-50 px-1">Débito (R$)</label>
+                                    <input type="number" id="in-tpv-deb" value="150000" class="w-full pt-3 pb-2 px-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-athos-orange focus:border-athos-orange outline-none bg-white font-semibold text-slate-800 transition">
+                                </div>
+                                <div class="relative">
+                                    <label class="text-xs font-semibold text-slate-500 absolute -top-2 left-3 bg-slate-50 px-1">Crédito (R$)</label>
+                                    <input type="number" id="in-tpv-cred" value="250000" class="w-full pt-3 pb-2 px-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-athos-orange focus:border-athos-orange outline-none bg-white font-semibold text-slate-800 transition">
+                                </div>
+                                <div class="relative">
+                                    <label class="text-xs font-semibold text-slate-500 absolute -top-2 left-3 bg-slate-50 px-1">Pix (R$)</label>
+                                    <input type="number" id="in-tpv-pix" value="100000" class="w-full pt-3 pb-2 px-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-athos-orange focus:border-athos-orange outline-none bg-white font-semibold text-slate-800 transition">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Configurações Máquina Atual -->
+                        <div class="bg-red-50/50 p-4 rounded-2xl border border-red-100">
+                            <p class="font-bold text-sm text-slate-700 mb-3 flex items-center gap-2"><i class="fas fa-calculator text-red-500"></i> Máquina Atual (Mercado Pago)</p>
+                            <div class="grid grid-cols-3 gap-2 mb-3">
+                                <div>
+                                    <label class="text-[10px] uppercase font-bold text-slate-500 block mb-1">Tx. Débito</label>
+                                    <div class="relative">
+                                        <input type="number" id="in-tx-deb-atual" value="0.94" step="0.01" class="w-full p-2 border border-slate-300 rounded-lg outline-none text-center font-semibold text-sm bg-white focus:border-red-400">
+                                        <span class="absolute right-2 top-2 text-xs text-slate-400">%</span>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="text-[10px] uppercase font-bold text-slate-500 block mb-1">Tx. Crédito</label>
+                                    <div class="relative">
+                                        <input type="number" id="in-tx-cred-atual" value="2.89" step="0.01" class="w-full p-2 border border-slate-300 rounded-lg outline-none text-center font-semibold text-sm bg-white focus:border-red-400">
+                                        <span class="absolute right-2 top-2 text-xs text-slate-400">%</span>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="text-[10px] uppercase font-bold text-slate-500 block mb-1">Tx. Pix</label>
+                                    <div class="relative">
+                                        <input type="number" id="in-tx-pix-atual" value="0.49" step="0.01" class="w-full p-2 border border-slate-300 rounded-lg outline-none text-center font-semibold text-sm bg-white focus:border-red-400">
+                                        <span class="absolute right-2 top-2 text-xs text-slate-400">%</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="text-xs uppercase font-bold text-red-600 block mb-1">Seu Imposto Atual</label>
+                                <div class="relative">
+                                    <input type="number" id="in-imposto" value="10" step="0.1" class="w-full p-3 border-2 border-red-200 bg-white rounded-xl outline-none text-center text-red-700 font-extrabold text-lg focus:border-red-400 transition">
+                                    <span class="absolute right-4 top-3.5 text-red-400 font-bold">%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TABELAS DE RESULTADO (C.E.T.) -->
+                <div class="lg:col-span-8 flex flex-col gap-8 w-full overflow-hidden">
+                    
+                    <p class="md:hidden text-center text-sm font-semibold text-athos-orange bg-orange-50 py-2 rounded-full border border-orange-100 mb-[-10px] animate-pulse">
+                        <i class="fas fa-arrows-alt-h mr-2"></i> Deslize as tabelas para os lados para ver detalhes
+                    </p>
+
+                    <!-- Tabela 1: Máquina Atual -->
+                    <div class="bg-white rounded-3xl shadow-soft border border-slate-200 overflow-hidden">
+                        <div class="bg-athos-salmon text-white py-4 px-6">
+                            <h3 class="text-lg font-bold flex items-center gap-2"><i class="fas fa-times-circle opacity-80"></i> Sua Máquina Atual (Mercado Pago)</h3>
+                        </div>
+                        <div class="table-container overflow-x-auto w-full">
+                            <table class="w-full text-left whitespace-nowrap min-w-[500px]">
+                                <thead class="bg-slate-50">
+                                    <tr>
+                                        <th class="py-3 px-6 font-bold text-slate-600 uppercase text-xs tracking-wider">Modalidade</th>
+                                        <th class="py-3 px-6 font-bold text-slate-600 uppercase text-xs tracking-wider text-center">Taxa Balcão</th>
+                                        <th class="py-3 px-6 font-bold text-slate-600 uppercase text-xs tracking-wider text-center text-red-500">Imposto Pago</th>
+                                        <th class="py-3 px-6 font-extrabold text-slate-800 uppercase text-xs tracking-wider text-right bg-slate-100">
+                                            C.E.T. Total
+                                            <span class="block text-[10px] text-slate-500 font-semibold normal-case tracking-normal mt-0.5">(Custo Efetivo Total)</span>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-slate-100 text-sm">
+                                    <tr class="hover:bg-slate-50 transition">
+                                        <td class="py-4 px-6 font-semibold text-slate-800">Débito</td>
+                                        <td class="py-4 px-6 text-center" id="out-tx-deb-atual">0,00%</td>
+                                        <td class="py-4 px-6 text-center text-red-500 font-medium" id="out-imp-deb">0,00%</td>
+                                        <td class="py-4 px-6 text-right font-bold text-slate-800 bg-slate-50/50" id="out-cet-deb-atual">0,00%</td>
+                                    </tr>
+                                    <tr class="hover:bg-slate-50 transition">
+                                        <td class="py-4 px-6 font-semibold text-slate-800">Crédito 1x antecipado</td>
+                                        <td class="py-4 px-6 text-center" id="out-tx-cred-atual">0,00%</td>
+                                        <td class="py-4 px-6 text-center text-red-500 font-medium" id="out-imp-cred">0,00%</td>
+                                        <td class="py-4 px-6 text-right font-bold text-slate-800 bg-slate-50/50" id="out-cet-cred-atual">0,00%</td>
+                                    </tr>
+                                    <tr class="hover:bg-slate-50 transition">
+                                        <td class="py-4 px-6 font-semibold text-slate-800">Pix</td>
+                                        <td class="py-4 px-6 text-center" id="out-tx-pix-atual">0,00%</td>
+                                        <td class="py-4 px-6 text-center text-red-500 font-medium" id="out-imp-pix">0,00%</td>
+                                        <td class="py-4 px-6 text-right font-bold text-slate-800 bg-slate-50/50" id="out-cet-pix-atual">0,00%</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Tabela 2: Athos Pay -->
+                    <div class="bg-white rounded-3xl shadow-soft border border-athos-orange/30 overflow-hidden relative">
+                        <div class="bg-gradient-to-r from-athos-orange to-yellow-500 text-white py-4 px-6 flex justify-between items-center">
+                            <h3 class="text-lg font-bold flex items-center gap-2"><i class="fas fa-check-circle opacity-90"></i> Tecnologia Athos Pay</h3>
+                            <span class="text-xs font-bold bg-white/20 px-2 py-1 rounded">Solução Split</span>
+                        </div>
+                        <div class="table-container overflow-x-auto w-full">
+                            <table class="w-full text-left whitespace-nowrap min-w-[500px]">
+                                <thead class="bg-orange-50/50">
+                                    <tr>
+                                        <th class="py-3 px-6 font-bold text-orange-900 uppercase text-xs tracking-wider">Modalidade</th>
+                                        <th class="py-3 px-6 font-bold text-orange-900 uppercase text-xs tracking-wider text-center">Taxa Balcão</th>
+                                        <th class="py-3 px-6 font-bold text-green-700 uppercase text-xs tracking-wider text-center">Blindagem (Split)</th>
+                                        <th class="py-3 px-6 font-extrabold text-orange-950 uppercase text-xs tracking-wider text-right bg-orange-100/50">
+                                            C.E.T. Total
+                                            <span class="block text-[10px] text-orange-800/80 font-semibold normal-case tracking-normal mt-0.5">(Custo Efetivo Total)</span>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-orange-100 text-sm">
+                                    <tr class="hover:bg-orange-50/50 transition">
+                                        <td class="py-4 px-6 font-semibold text-slate-800">Débito</td>
+                                        <td class="py-4 px-6 text-center font-medium" id="out-tx-deb-athos">0,00%</td>
+                                        <td class="py-4 px-6 text-center text-green-600 font-bold bg-green-50/30" id="out-bli-deb">0,00%</td>
+                                        <td class="py-4 px-6 text-right font-extrabold text-athos-orange bg-orange-50/30" id="out-cet-deb-athos">0,00%</td>
+                                    </tr>
+                                    <tr class="hover:bg-orange-50/50 transition">
+                                        <td class="py-4 px-6 font-semibold text-slate-800">Crédito 1x antecipado</td>
+                                        <td class="py-4 px-6 text-center font-medium" id="out-tx-cred-athos">0,00%</td>
+                                        <td class="py-4 px-6 text-center text-green-600 font-bold bg-green-50/30" id="out-bli-cred">0,00%</td>
+                                        <td class="py-4 px-6 text-right font-extrabold text-athos-orange bg-orange-50/30" id="out-cet-cred-athos">0,00%</td>
+                                    </tr>
+                                    <tr class="hover:bg-orange-50/50 transition">
+                                        <td class="py-4 px-6 font-semibold text-slate-800">Pix</td>
+                                        <td class="py-4 px-6 text-center font-medium" id="out-tx-pix-athos">0,00%</td>
+                                        <td class="py-4 px-6 text-center text-green-600 font-bold bg-green-50/30" id="out-bli-pix">0,00%</td>
+                                        <td class="py-4 px-6 text-right font-extrabold text-athos-orange bg-orange-50/30" id="out-cet-pix-athos">0,00%</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Tabela 3 & 4 Combinadas: A Grande Revelação -->
+                    <div class="bg-athos-dark rounded-3xl shadow-2xl overflow-hidden border border-slate-700 mt-4 relative">
+                        <!-- Decorativo -->
+                        <div class="absolute top-0 right-0 w-32 h-32 bg-green-500 rounded-full blur-3xl opacity-20 pointer-events-none"></div>
+                        
+                        <div class="bg-slate-900 border-b border-slate-700 py-5 px-6">
+                            <h3 class="text-xl font-extrabold text-white text-center flex items-center justify-center gap-3">
+                                <i class="fas fa-trophy text-yellow-400"></i> Comparativo Final e Economia Gerada
+                            </h3>
+                        </div>
+                        
+                        <div class="table-container overflow-x-auto w-full">
+                            <table class="w-full text-left whitespace-nowrap min-w-[650px]">
+                                <thead class="bg-slate-800">
+                                    <tr>
+                                        <th class="py-4 px-6 font-bold text-slate-300 uppercase text-[11px] tracking-wider">Modalidade</th>
+                                        <th class="py-4 px-6 font-bold text-athos-salmon uppercase text-[11px] tracking-wider text-center bg-slate-800/80">
+                                            Custo Atual
+                                            <span class="block text-[9px] text-slate-400 font-semibold normal-case tracking-normal mt-0.5">(Em Reais)</span>
+                                        </th>
+                                        <th class="py-4 px-6 font-bold text-athos-orange uppercase text-[11px] tracking-wider text-center bg-slate-800/80">
+                                            Custo Athos
+                                            <span class="block text-[9px] text-slate-400 font-semibold normal-case tracking-normal mt-0.5">(Em Reais)</span>
+                                        </th>
+                                        <th class="py-4 px-6 font-bold text-green-400 uppercase text-[11px] tracking-wider text-center">Diferença (%)</th>
+                                        <th class="py-4 px-6 font-extrabold text-white uppercase text-[11px] tracking-wider text-right bg-slate-900">Lucro Adicional</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-slate-700/50 text-sm">
+                                    <tr class="hover:bg-slate-800/50 transition">
+                                        <td class="py-4 px-6 font-semibold text-slate-200">Débito <span class="block text-xs text-slate-500 font-normal mt-0.5" id="eco-tpv-deb">R$ 0,00</span></td>
+                                        <td class="py-4 px-6 text-center font-bold text-athos-salmon" id="comp-custo-deb-atual">R$ 0,00</td>
+                                        <td class="py-4 px-6 text-center font-bold text-athos-orange" id="comp-custo-deb-athos">R$ 0,00</td>
+                                        <td class="py-4 px-6 text-center font-extrabold text-green-400 bg-green-400/5" id="comp-dif-deb">0,00%</td>
+                                        <td class="py-4 px-6 text-right font-bold text-green-400 bg-slate-900" id="eco-lucro-deb">R$ 0,00</td>
+                                    </tr>
+                                    <tr class="hover:bg-slate-800/50 transition">
+                                        <td class="py-4 px-6 font-semibold text-slate-200">Crédito <span class="block text-xs text-slate-500 font-normal mt-0.5" id="eco-tpv-cred">R$ 0,00</span></td>
+                                        <td class="py-4 px-6 text-center font-bold text-athos-salmon" id="comp-custo-cred-atual">R$ 0,00</td>
+                                        <td class="py-4 px-6 text-center font-bold text-athos-orange" id="comp-custo-cred-athos">R$ 0,00</td>
+                                        <td class="py-4 px-6 text-center font-extrabold text-green-400 bg-green-400/5" id="comp-dif-cred">0,00%</td>
+                                        <td class="py-4 px-6 text-right font-bold text-green-400 bg-slate-900" id="eco-lucro-cred">R$ 0,00</td>
+                                    </tr>
+                                    <tr class="hover:bg-slate-800/50 transition">
+                                        <td class="py-4 px-6 font-semibold text-slate-200">Pix <span class="block text-xs text-slate-500 font-normal mt-0.5" id="eco-tpv-pix">R$ 0,00</span></td>
+                                        <td class="py-4 px-6 text-center font-bold text-athos-salmon" id="comp-custo-pix-atual">R$ 0,00</td>
+                                        <td class="py-4 px-6 text-center font-bold text-athos-orange" id="comp-custo-pix-athos">R$ 0,00</td>
+                                        <td class="py-4 px-6 text-center font-extrabold text-green-400 bg-green-400/5" id="comp-dif-pix">0,00%</td>
+                                        <td class="py-4 px-6 text-right font-bold text-green-400 bg-slate-900" id="eco-lucro-pix">R$ 0,00</td>
+                                    </tr>
+                                    
+                                    <!-- Totais -->
+                                    <tr class="bg-slate-900">
+                                        <td colspan="4" class="py-5 px-6 text-right font-bold text-slate-300 uppercase tracking-widest text-xs">
+                                            Seu Lucro Líquido Mensal
+                                        </td>
+                                        <td class="py-5 px-6 text-right font-black text-2xl text-green-400 value-animate" id="eco-total-mensal">
+                                            R$ 0,00
+                                        </td>
+                                    </tr>
+                                    <tr class="bg-gradient-to-r from-slate-900 to-green-900/40">
+                                        <td colspan="4" class="py-6 px-6 text-right font-black text-white uppercase tracking-widest text-sm">
+                                            Sua Economia Anual
+                                        </td>
+                                        <td class="py-6 px-6 text-right font-black text-3xl md:text-4xl text-green-300 drop-shadow-md value-animate" id="eco-total-anual">
+                                            R$ 0,00
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Call to Action -->
+        <div class="text-center py-10">
+            <h2 class="text-3xl md:text-4xl font-extrabold text-athos-dark mb-4">Vamos concretizar esta economia?</h2>
+            <p class="text-slate-600 mb-10 max-w-2xl mx-auto text-lg">Com o volume de faturamento da sua empresa, cada dia sem o split representa capital perdido em impostos desnecessários.</p>
+            
+            <div class="max-w-3xl mx-auto bg-gradient-to-br from-white to-slate-50 p-8 md:p-10 rounded-[2.5rem] shadow-xl border border-athos-orange/20 relative overflow-hidden text-left transform transition duration-500 hover:-translate-y-2 hover:shadow-2xl">
+                <div class="absolute -bottom-10 -right-10 opacity-[0.03] text-athos-orange text-[15rem] leading-none pointer-events-none"><i class="fas fa-mobile-alt"></i></div>
+                <div class="relative z-10 flex flex-col md:flex-row items-center md:items-start gap-8">
+                    <div class="bg-gradient-to-br from-orange-100 to-orange-50 text-athos-orange w-24 h-24 rounded-3xl flex items-center justify-center text-4xl flex-shrink-0 shadow-inner border border-orange-200">
+                        <i class="fas fa-mobile-screen-button"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl md:text-3xl font-extrabold text-slate-800 mb-3 text-center md:text-left tracking-tight">Tudo isso na palma da sua mão!</h3>
+                        <p class="text-slate-600 text-center md:text-left text-lg leading-relaxed">
+                            O empresário tem controle total e liberdade. Realize a gestão completa do seu dinheiro, cadastre novos parceiros para o split e acompanhe os seus recebimentos em tempo real, <strong>diretamente pelo aplicativo no seu celular ou portal web</strong>.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="bg-slate-900 text-slate-400 py-10 text-center text-sm border-t border-slate-800">
+        <div class="mb-6 flex justify-center">
+            <div class="px-6 py-2 bg-white/5 rounded-full border border-white/10">
+                <span class="font-black text-xl text-white tracking-widest"><span class="text-athos-orange">ATHOS</span> PAY</span>
+            </div>
+        </div>
+        <p>&copy; 2026 Athos Pay. Todos os direitos reservados.</p>
+        <p class="mt-2 font-medium text-slate-500">Soluções Customizadas e Inteligência Financeira.</p>
+    </footer>
+
+    <!-- Botão Flutuante WhatsApp -->
+    <a href="#" class="float-wpp" title="Falar com Especialista">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <script>
+        // Formatações
+        const formataMoeda = (valor) => new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(valor);
+        const formataNum = (valor) => new Intl.NumberFormat('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(valor);
+        const formataPerc = (valor) => formataNum(valor) + '%';
+
+        // Taxas Fixas da Athos Pay (Hardcoded)
+        const TX_DEB_ATHOS = 1.05;
+        const TX_CRED_ATHOS = 3.27;
+        const TX_PIX_ATHOS = 0.99;
+        
+        // Blindagem específica por modalidade
+        const BLINDAGEM_DEB_ATHOS = 2.0;
+        const BLINDAGEM_CRED_ATHOS = 3.0;
+        const BLINDAGEM_PIX_ATHOS = 2.0;
+
+        function calcularTabelas() {
+            // Leituras dos inputs (Apenas o que o cliente edita)
+            const tpvDeb = parseFloat(document.getElementById('in-tpv-deb').value) || 0;
+            const tpvCred = parseFloat(document.getElementById('in-tpv-cred').value) || 0;
+            const tpvPix = parseFloat(document.getElementById('in-tpv-pix').value) || 0;
+            
+            const txDebAtual = parseFloat(document.getElementById('in-tx-deb-atual').value) || 0;
+            const txCredAtual = parseFloat(document.getElementById('in-tx-cred-atual').value) || 0;
+            const txPixAtual = parseFloat(document.getElementById('in-tx-pix-atual').value) || 0;
+            const imposto = parseFloat(document.getElementById('in-imposto').value) || 0;
+
+            // --- TABELA 1: Máquina Atual ---
+            document.getElementById('out-tx-deb-atual').innerText = formataPerc(txDebAtual);
+            document.getElementById('out-tx-cred-atual').innerText = formataPerc(txCredAtual);
+            document.getElementById('out-tx-pix-atual').innerText = formataPerc(txPixAtual);
+            
+            document.getElementById('out-imp-deb').innerText = formataPerc(imposto);
+            document.getElementById('out-imp-cred').innerText = formataPerc(imposto);
+            document.getElementById('out-imp-pix').innerText = formataPerc(imposto);
+            
+            const cetDebAtual = txDebAtual + imposto;
+            const cetCredAtual = txCredAtual + imposto;
+            const cetPixAtual = txPixAtual + imposto;
+            
+            document.getElementById('out-cet-deb-atual').innerText = formataPerc(cetDebAtual);
+            document.getElementById('out-cet-cred-atual').innerText = formataPerc(cetCredAtual);
+            document.getElementById('out-cet-pix-atual').innerText = formataPerc(cetPixAtual);
+
+            // --- TABELA 2: Athos Pay ---
+            document.getElementById('out-tx-deb-athos').innerText = formataPerc(TX_DEB_ATHOS);
+            document.getElementById('out-tx-cred-athos').innerText = formataPerc(TX_CRED_ATHOS);
+            document.getElementById('out-tx-pix-athos').innerText = formataPerc(TX_PIX_ATHOS);
+            
+            document.getElementById('out-bli-deb').innerText = formataPerc(BLINDAGEM_DEB_ATHOS);
+            document.getElementById('out-bli-cred').innerText = formataPerc(BLINDAGEM_CRED_ATHOS);
+            document.getElementById('out-bli-pix').innerText = formataPerc(BLINDAGEM_PIX_ATHOS);
+
+            const cetDebAthos = TX_DEB_ATHOS + BLINDAGEM_DEB_ATHOS;
+            const cetCredAthos = TX_CRED_ATHOS + BLINDAGEM_CRED_ATHOS;
+            const cetPixAthos = TX_PIX_ATHOS + BLINDAGEM_PIX_ATHOS;
+
+            document.getElementById('out-cet-deb-athos').innerText = formataPerc(cetDebAthos);
+            document.getElementById('out-cet-cred-athos').innerText = formataPerc(cetCredAthos);
+            document.getElementById('out-cet-pix-athos').innerText = formataPerc(cetPixAthos);
+
+            // --- TABELA 3 & 4 (Combinadas) ---
+            // Calcular os custos em Reais
+            const custoDebAtual = tpvDeb * (cetDebAtual / 100);
+            const custoCredAtual = tpvCred * (cetCredAtual / 100);
+            const custoPixAtual = tpvPix * (cetPixAtual / 100);
+            
+            const custoDebAthos = tpvDeb * (cetDebAthos / 100);
+            const custoCredAthos = tpvCred * (cetCredAthos / 100);
+            const custoPixAthos = tpvPix * (cetPixAthos / 100);
+
+            document.getElementById('comp-custo-deb-atual').innerText = formataMoeda(custoDebAtual);
+            document.getElementById('comp-custo-cred-atual').innerText = formataMoeda(custoCredAtual);
+            document.getElementById('comp-custo-pix-atual').innerText = formataMoeda(custoPixAtual);
+            
+            document.getElementById('comp-custo-deb-athos').innerText = formataMoeda(custoDebAthos);
+            document.getElementById('comp-custo-cred-athos').innerText = formataMoeda(custoCredAthos);
+            document.getElementById('comp-custo-pix-athos').innerText = formataMoeda(custoPixAthos);
+
+            const difDeb = cetDebAtual - cetDebAthos;
+            const difCred = cetCredAtual - cetCredAthos;
+            const difPix = cetPixAtual - cetPixAthos;
+
+            document.getElementById('comp-dif-deb').innerText = formataPerc(difDeb);
+            document.getElementById('comp-dif-cred').innerText = formataPerc(difCred);
+            document.getElementById('comp-dif-pix').innerText = formataPerc(difPix);
+
+            document.getElementById('eco-tpv-deb').innerText = 'TPV: R$ ' + formataNum(tpvDeb);
+            document.getElementById('eco-tpv-cred').innerText = 'TPV: R$ ' + formataNum(tpvCred);
+            document.getElementById('eco-tpv-pix').innerText = 'TPV: R$ ' + formataNum(tpvPix);
+
+            const lucroDeb = tpvDeb * (difDeb / 100);
+            const lucroCred = tpvCred * (difCred / 100);
+            const lucroPix = tpvPix * (difPix / 100);
+
+            document.getElementById('eco-lucro-deb').innerText = '+ ' + formataMoeda(lucroDeb);
+            document.getElementById('eco-lucro-cred').innerText = '+ ' + formataMoeda(lucroCred);
+            document.getElementById('eco-lucro-pix').innerText = '+ ' + formataMoeda(lucroPix);
+
+            const lucroMensalTotal = lucroDeb + lucroCred + lucroPix;
+            document.getElementById('eco-total-mensal').innerText = formataMoeda(lucroMensalTotal);
+
+            // Economia Anual
+            const lucroAnualTotal = lucroMensalTotal * 12;
+            document.getElementById('eco-total-anual').innerText = formataMoeda(lucroAnualTotal);
+        }
+
+        // Listeners para atualizar automaticamente ao digitar
+        const inputs = document.querySelectorAll('input[type="number"]');
+        inputs.forEach(input => {
+            input.addEventListener('input', calcularTabelas);
+        });
+
+        // Calculo inicial
+        window.addEventListener('DOMContentLoaded', calcularTabelas);
+    </script>
+</body>
+</html>
