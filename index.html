@@ -3,523 +3,946 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Proposta Athos Pay - Otimização Tributária</title>
+    <title>Simuladores Athos Pay - Split de Recebíveis</title>
+    <!-- Vue 3 CDN -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <!-- Tailwind CSS CDN para estilização rápida e moderna -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                    },
-                    colors: {
-                        athos: {
-                            orange: '#F26522',
-                            dark: '#0f172a', /* slate-900 */
-                            light: '#fff7ed',
-                            salmon: '#f87171', /* red-400 */
-                            tableGray: '#94a3b8' /* slate-400 */
-                        }
-                    },
-                    boxShadow: {
-                        'soft': '0 10px 40px -10px rgba(0,0,0,0.08)',
-                    }
-                }
-            }
-        }
-    </script>
+    <!-- Feather Icons para os ícones -->
+    <script src="https://unpkg.com/feather-icons"></script>
+    
     <style>
-        body { font-family: 'Inter', sans-serif; }
-        
-        /* Remove arrows from number inputs */
-        input[type=number] { -moz-appearance: textfield; }
-        input[type=number]::-webkit-outer-spin-button,
-        input[type=number]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
-        
-        /* Custom Scrollbar for tables */
-        .table-container::-webkit-scrollbar { height: 6px; }
-        .table-container::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 4px; }
-        .table-container::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
-        .table-container::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
-        
-        /* Smooth transitions */
-        .value-animate { transition: all 0.3s ease-in-out; }
-        
-        /* Table Styles */
-        table { border-collapse: separate; border-spacing: 0; width: 100%; }
-        th, td { border: 1px solid #e2e8f0; }
-        thead th { border-bottom-width: 2px; }
-        
-        /* Floating WhatsApp Button */
-        .float-wpp {
-            position: fixed;
-            width: 60px;
-            height: 60px;
-            bottom: 20px;
-            right: 20px;
-            background-color: #25d366;
-            color: #FFF;
-            border-radius: 50px;
-            text-align: center;
-            font-size: 30px;
-            box-shadow: 0px 4px 10px rgba(0,0,0,0.3);
-            z-index: 100;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: transform 0.3s;
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+        .slide-container {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%; /* Aspect Ratio 16:9 */
+            background-color: #e5e7eb;
+            border-radius: 0.5rem;
+            overflow: hidden;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
-        .float-wpp:hover { transform: scale(1.1); color: #fff; }
+        .slide-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800 antialiased selection:bg-athos-orange selection:text-white">
+<body class="bg-gray-100 text-gray-800 h-screen flex flex-col overflow-hidden">
+    <div id="app" class="flex flex-col h-full">
 
-    <!-- Cabeçalho (Hero) -->
-    <header class="bg-gradient-to-br from-athos-dark via-slate-800 to-slate-900 text-white py-16 px-4 shadow-xl text-center relative overflow-hidden">
-        <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-athos-orange to-yellow-400"></div>
-        <!-- Efeito de fundo -->
-        <div class="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] mix-blend-overlay"></div>
-        
-        <div class="max-w-4xl mx-auto relative z-10 flex flex-col items-center">
-            <div class="bg-white/10 px-4 py-1.5 rounded-full text-sm font-semibold tracking-wide text-athos-orange mb-6 border border-athos-orange/30 backdrop-blur-sm inline-block">
-                Proposta Exclusiva
-            </div>
-            <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold mb-6 tracking-tight leading-tight">
-                Otimização Financeira <br class="hidden md:block">
-                <span class="text-transparent bg-clip-text bg-gradient-to-r from-athos-orange to-yellow-400">e Tributária</span>
-            </h1>
-            <p class="text-lg md:text-xl text-slate-300 max-w-2xl mx-auto font-light leading-relaxed">
-                Proteja a sua margem de lucro com a gestão inteligente de recebíveis através da <strong>ferramenta Split de Recebíveis</strong> da Athos Pay.
-            </p>
-        </div>
-    </header>
-
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 py-12 md:py-16">
-        
-        <!-- O Problema x A Solução (Cards) -->
-        <section class="grid md:grid-cols-2 gap-6 md:gap-8 mb-16">
-            <div class="bg-white p-8 md:p-10 rounded-3xl shadow-soft border border-slate-100 relative overflow-hidden group hover:shadow-lg transition duration-300">
-                <div class="absolute top-0 left-0 w-2 h-full bg-red-500"></div>
-                <div class="w-14 h-14 bg-red-50 text-red-500 rounded-2xl flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition-transform">
-                    <i class="fas fa-exclamation-triangle"></i>
+        <!-- ÁREA PRINCIPAL (Visualizador) -->
+        <main class="flex-1 flex flex-col items-center justify-center p-4 md:p-8 overflow-y-auto">
+            <div class="w-full max-w-5xl">
+                <!-- Visualizador de Slides (Iframe carregando os códigos injetados) -->
+                <div class="slide-container relative">
+                    <iframe v-if="slides.length > 0" :srcdoc="slides[currentSlideIndex].content" title="Slide Viewer"></iframe>
+                    
+                    <!-- Sobreposição de Carregamento -->
+                    <div v-if="isLoadingSlide" class="absolute inset-0 bg-white/80 flex items-center justify-center backdrop-blur-sm">
+                        <i data-feather="loader" class="w-8 h-8 text-blue-600 animate-spin"></i>
+                    </div>
                 </div>
-                <h2 class="text-2xl font-bold mb-4 text-slate-800">O Modelo Atual <span class="text-red-500 text-lg font-semibold block mt-1">(Bitributação)</span></h2>
-                <p class="text-slate-600 leading-relaxed">
-                    Atualmente, você paga impostos sobre <strong>100%</strong> do que entra na sua máquina, mesmo quando parte desse valor pertence a fornecedores ou profissionais parceiros. O seu dinheiro é taxado duas vezes, reduzindo drasticamente o seu lucro líquido real.
-                </p>
-            </div>
-            
-            <div class="bg-white p-8 md:p-10 rounded-3xl shadow-soft border border-slate-100 relative overflow-hidden group hover:shadow-lg transition duration-300">
-                <div class="absolute top-0 left-0 w-2 h-full bg-athos-orange"></div>
-                <div class="w-14 h-14 bg-orange-50 text-athos-orange rounded-2xl flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition-transform">
-                    <i class="fas fa-shield-halved"></i>
-                </div>
-                <h2 class="text-2xl font-bold mb-4 text-slate-800">A Solução <span class="text-athos-orange text-lg font-semibold block mt-1">(Athos Pay)</span></h2>
-                <p class="text-slate-600 leading-relaxed">
-                    Nossa tecnologia dá ao seu Estabelecimento a liberdade de dividir (splitar) a sua Unidade de Recebíveis (UR) para terceiros <strong>antes da liquidação</strong>. Com a indicação de destinação direta via split, o repasse ocorre <strong>sem transitar na conta do lojista</strong>. Assim, cada um paga apenas o imposto devido sobre a sua parte e a <strong>DIMP é declarada diretamente em nome de cada beneficiário</strong>. Liberdade tributária 100% dentro da legalidade.
-                </p>
-            </div>
-        </section>
 
-        <!-- NOVO SIMULADOR BASEADO NO C.E.T. -->
-        <section class="mb-16">
-            <div class="text-center mb-10">
-                <h2 class="text-3xl md:text-4xl font-extrabold text-athos-dark mb-4 tracking-tight">
-                    Simulador de <span class="text-athos-orange">C.E.T.</span>
-                </h2>
-                <p class="text-slate-500 max-w-2xl mx-auto">Descubra exatamente de onde vem o seu lucro mensal comparando o Custo Efetivo Total da sua operação atual com a Athos Pay.</p>
+                <!-- Controles de Navegação -->
+                <div class="mt-6 flex items-center justify-center gap-6">
+                    <button @click="prevSlide" :disabled="currentSlideIndex === 0" class="p-3 rounded-full bg-white shadow-sm border border-gray-200 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition">
+                        <i data-feather="chevron-left"></i>
+                    </button>
+                    <span class="text-sm font-medium text-gray-600 w-16 text-center">
+                        {{ currentSlideIndex + 1 }} / {{ slides.length }}
+                    </span>
+                    <button @click="nextSlide" :disabled="currentSlideIndex === slides.length - 1" class="p-3 rounded-full bg-white shadow-sm border border-gray-200 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition">
+                        <i data-feather="chevron-right"></i>
+                    </button>
+                </div>
             </div>
-            
-            <div class="grid lg:grid-cols-12 gap-8 items-start">
+        </main>
+    </div>
+
+    <script>
+        const { createApp, ref, onMounted, nextTick } = Vue;
+
+        createApp({
+            setup() {
+                // --- ESTADO DA APLICAÇÃO ---
+                const slides = ref([]);
+                const currentSlideIndex = ref(0);
+                const isLoadingSlide = ref(false);
+
+                // --- TEXTOS BRUTOS HTML DOS SLIDES (Os seus 4 arquivos) ---
                 
-                <!-- PAINEL DE CONTROLES (Inputs) -->
-                <div class="lg:col-span-4 bg-white p-6 md:p-8 rounded-3xl shadow-soft border border-slate-200 lg:sticky lg:top-8">
-                    <div class="flex items-center gap-3 mb-6 pb-4 border-b border-slate-100">
-                        <div class="w-10 h-10 bg-slate-100 text-slate-600 rounded-full flex items-center justify-center"><i class="fas fa-sliders-h"></i></div>
-                        <h3 class="font-bold text-xl text-slate-800">Seus Números</h3>
-                    </div>
-                    
-                    <div class="space-y-6">
-                        <!-- Volume Transacionado -->
-                        <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100">
-                            <p class="font-bold text-sm text-slate-700 mb-3 flex items-center gap-2"><i class="fas fa-wallet text-athos-orange"></i> Volume Mensal (TPV)</p>
-                            <div class="space-y-3">
-                                <div class="relative">
-                                    <label class="text-xs font-semibold text-slate-500 absolute -top-2 left-3 bg-slate-50 px-1">Débito (R$)</label>
-                                    <input type="number" id="in-tpv-deb" value="150000" class="w-full pt-3 pb-2 px-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-athos-orange focus:border-athos-orange outline-none bg-white font-semibold text-slate-800 transition">
-                                </div>
-                                <div class="relative">
-                                    <label class="text-xs font-semibold text-slate-500 absolute -top-2 left-3 bg-slate-50 px-1">Crédito (R$)</label>
-                                    <input type="number" id="in-tpv-cred" value="250000" class="w-full pt-3 pb-2 px-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-athos-orange focus:border-athos-orange outline-none bg-white font-semibold text-slate-800 transition">
-                                </div>
-                                <div class="relative">
-                                    <label class="text-xs font-semibold text-slate-500 absolute -top-2 left-3 bg-slate-50 px-1">Pix (R$)</label>
-                                    <input type="number" id="in-tpv-pix" value="100000" class="w-full pt-3 pb-2 px-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-athos-orange focus:border-athos-orange outline-none bg-white font-semibold text-slate-800 transition">
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Configurações Máquina Atual -->
-                        <div class="bg-red-50/50 p-4 rounded-2xl border border-red-100">
-                            <p class="font-bold text-sm text-slate-700 mb-3 flex items-center gap-2"><i class="fas fa-calculator text-red-500"></i> Sua Máquina Atual (Mercado Pago)</p>
-                            <div class="grid grid-cols-3 gap-2 mb-3">
-                                <div>
-                                    <label class="text-[10px] uppercase font-bold text-slate-500 block mb-1">Tx. Débito</label>
-                                    <div class="relative">
-                                        <input type="number" id="in-tx-deb-atual" value="0.94" step="0.01" class="w-full p-2 border border-slate-300 rounded-lg outline-none text-center font-semibold text-sm bg-white focus:border-red-400">
-                                        <span class="absolute right-2 top-2 text-xs text-slate-400">%</span>
-                                    </div>
-                                </div>
-                                <div>
-                                    <label class="text-[10px] uppercase font-bold text-slate-500 block mb-1">Tx. Crédito</label>
-                                    <div class="relative">
-                                        <input type="number" id="in-tx-cred-atual" value="2.89" step="0.01" class="w-full p-2 border border-slate-300 rounded-lg outline-none text-center font-semibold text-sm bg-white focus:border-red-400">
-                                        <span class="absolute right-2 top-2 text-xs text-slate-400">%</span>
-                                    </div>
-                                </div>
-                                <div>
-                                    <label class="text-[10px] uppercase font-bold text-slate-500 block mb-1">Tx. Pix</label>
-                                    <div class="relative">
-                                        <input type="number" id="in-tx-pix-atual" value="0.49" step="0.01" class="w-full p-2 border border-slate-300 rounded-lg outline-none text-center font-semibold text-sm bg-white focus:border-red-400">
-                                        <span class="absolute right-2 top-2 text-xs text-slate-400">%</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div>
-                                <label class="text-xs uppercase font-bold text-red-600 block mb-1">Seu Imposto Atual</label>
-                                <div class="relative">
-                                    <input type="number" id="in-imposto" value="10" step="0.1" class="w-full p-3 border-2 border-red-200 bg-white rounded-xl outline-none text-center text-red-700 font-extrabold text-lg focus:border-red-400 transition">
-                                    <span class="absolute right-4 top-3.5 text-red-400 font-bold">%</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- TABELAS DE RESULTADO (C.E.T.) -->
-                <div class="lg:col-span-8 flex flex-col gap-8 w-full overflow-hidden">
-                    
-                    <p class="md:hidden text-center text-sm font-semibold text-athos-orange bg-orange-50 py-2 rounded-full border border-orange-100 mb-[-10px] animate-pulse">
-                        <i class="fas fa-arrows-alt-h mr-2"></i> Deslize as tabelas para os lados para ver detalhes
+                // SLIDE 1
+                const slide1Raw = `
+<html lang="pt-BR"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Split de Recebíveis Athos Pay</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <style>
+        body { font-family: 'Montserrat', sans-serif; margin: 0; padding: 0; }
+        .slide-bg { background: linear-gradient(135deg, #10104f 0%, #003D7B 100%); width: 1280px; height: 720px; overflow: hidden; position: relative; }
+        .accent-line { position: absolute; height: 720px; width: 300px; background: linear-gradient(135deg, #15f35b 0%, #1599ff 100%); transform: skewX(-20deg) translateX(-150px); opacity: 0.2; top: 0; left: 0; }
+        .content-card { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(5px); border-radius: 15px; border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); }
+        .info-card { background: rgba(0, 61, 123, 0.3); border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.1); transition: all 0.3s ease; }
+        .legal-badge { background: rgba(21, 243, 91, 0.1); border-left: 3px solid #15f35b; border-radius: 4px; padding: 4px 10px; margin: 4px 0; display: inline-block; }
+        .warning-box { background: rgba(255, 159, 64, 0.1); border-left: 3px solid rgba(255, 159, 64, 1); border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <div class="slide-bg flex flex-col justify-start items-start p-8 text-white">
+        <div class="accent-line"></div>
+        <div class="absolute top-6 right-6">
+            <img src="https://athospay.github.io/teste/logocolorida.svg" alt="Athospay Logo" class="h-14">
+        </div>
+        <div class="mb-4 z-10">
+            <h1 class="text-5xl font-bold mb-2">Split de Recebíveis</h1>
+            <div class="h-1 w-40 bg-gradient-to-r from-green-400 to-blue-500 mt-2" style="background: linear-gradient(90deg, #15f35b 0%, #1599ff 100%);"></div>
+        </div>
+        <div class="w-full grid grid-cols-12 gap-6 z-10">
+            <div class="col-span-7">
+                <div class="content-card p-5 h-full">
+                    <h2 class="text-2xl font-semibold mb-4 text-green-300">
+                        <i class="fas fa-chart-pie mr-2"></i>Solução Exclusiva da Athos Pay
+                    </h2>
+                    <p class="text-blue-100 mb-4">
+                        O <strong class="text-green-300">Split de Recebíveis</strong> é uma ferramenta extraordinária para <strong>evitar a bitributação</strong> em diversos modelos de negócios, permitindo a distribuição automática dos valores recebidos entre os participantes da operação.
                     </p>
-
-                    <!-- Tabela 1: Máquina Atual -->
-                    <div class="bg-white rounded-3xl shadow-soft border border-slate-200 overflow-hidden">
-                        <div class="bg-athos-salmon text-white py-4 px-6">
-                            <h3 class="text-lg font-bold flex items-center gap-2"><i class="fas fa-times-circle opacity-80"></i> Sua Máquina Atual (Mercado Pago)</h3>
-                        </div>
-                        <div class="table-container overflow-x-auto w-full">
-                            <table class="w-full text-left whitespace-nowrap min-w-[500px]">
-                                <thead class="bg-slate-50">
-                                    <tr>
-                                        <th class="py-3 px-6 font-bold text-slate-600 uppercase text-xs tracking-wider">Modalidade</th>
-                                        <th class="py-3 px-6 font-bold text-slate-600 uppercase text-xs tracking-wider text-center">Taxa Balcão</th>
-                                        <th class="py-3 px-6 font-bold text-slate-600 uppercase text-xs tracking-wider text-center text-red-500">Imposto Pago</th>
-                                        <th class="py-3 px-6 font-extrabold text-slate-800 uppercase text-xs tracking-wider text-right bg-slate-100">
-                                            C.E.T. Total
-                                            <span class="block text-[10px] text-slate-500 font-semibold normal-case tracking-normal mt-0.5">(Custo Efetivo Total)</span>
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody class="divide-y divide-slate-100 text-sm">
-                                    <tr class="hover:bg-slate-50 transition">
-                                        <td class="py-4 px-6 font-semibold text-slate-800">Débito</td>
-                                        <td class="py-4 px-6 text-center" id="out-tx-deb-atual">0,00%</td>
-                                        <td class="py-4 px-6 text-center text-red-500 font-medium" id="out-imp-deb">0,00%</td>
-                                        <td class="py-4 px-6 text-right font-bold text-slate-800 bg-slate-50/50" id="out-cet-deb-atual">0,00%</td>
-                                    </tr>
-                                    <tr class="hover:bg-slate-50 transition">
-                                        <td class="py-4 px-6 font-semibold text-slate-800">Crédito 1x antecipado</td>
-                                        <td class="py-4 px-6 text-center" id="out-tx-cred-atual">0,00%</td>
-                                        <td class="py-4 px-6 text-center text-red-500 font-medium" id="out-imp-cred">0,00%</td>
-                                        <td class="py-4 px-6 text-right font-bold text-slate-800 bg-slate-50/50" id="out-cet-cred-atual">0,00%</td>
-                                    </tr>
-                                    <tr class="hover:bg-slate-50 transition">
-                                        <td class="py-4 px-6 font-semibold text-slate-800">Pix</td>
-                                        <td class="py-4 px-6 text-center" id="out-tx-pix-atual">0,00%</td>
-                                        <td class="py-4 px-6 text-center text-red-500 font-medium" id="out-imp-pix">0,00%</td>
-                                        <td class="py-4 px-6 text-right font-bold text-slate-800 bg-slate-50/50" id="out-cet-pix-atual">0,00%</td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                    <h3 class="text-xl font-semibold mb-3 text-blue-200">
+                        <i class="fas fa-gavel mr-2"></i>100% Alinhado à Legislação
+                    </h3>
+                    <div class="grid grid-cols-2 gap-2 mb-4">
+                        <div class="legal-badge text-green-300"><i class="fas fa-check-circle mr-1"></i> CTN Art. 116, 121</div>
+                        <div class="legal-badge text-green-300"><i class="fas fa-check-circle mr-1"></i> CC Arts. 286-298 e 653/658</div>
+                        <div class="legal-badge text-green-300"><i class="fas fa-check-circle mr-1"></i> LC 123/2006 Art. 13</div>
+                        <div class="legal-badge text-green-300"><i class="fas fa-check-circle mr-1"></i> IN RFB 1.700/2017 Art. 215</div>
+                        <div class="legal-badge text-green-300"><i class="fas fa-check-circle mr-1"></i> BCB 150/2021, 80/2021, 264/2023</div>
+                        <div class="legal-badge text-green-300"><i class="fas fa-check-circle mr-1"></i> ICMS 134/16 / COTEPE 65/18</div>
+                        <div class="legal-badge text-green-300 col-span-2"><i class="fas fa-check-circle mr-1"></i> IN RFB 2.163/2023 - EFD Reinf R 4010/4020</div>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3 text-blue-200">
+                        <i class="fas fa-shield-alt mr-2"></i>Evitando a Bitributação
+                    </h3>
+                    <p class="text-blue-100 mb-4" style="font-size: 14px; font-weight: normal; text-decoration: none; font-style: normal; color: rgb(219, 234, 254); text-align: start;">
+                        A solução permite que cada participante receba diretamente sua parte na transação, evitando que o mesmo valor seja tributado múltiplas vezes ao longo da cadeia de repasses.
+                    </p>
+                    <div class="warning-box p-4 text-yellow-300">
+                        <div class="flex items-start">
+                            <i class="fas fa-exclamation-triangle mt-1 mr-2"></i>
+                            <div>
+                                <p class="font-semibold mb-1">IMPORTANTE:</p>
+                                <p class="text-sm" style="font-size: 14px; font-weight: normal; text-decoration: none; font-style: normal; color: rgb(252, 211, 77); text-align: start;">Cada negócio possui suas particularidades. É extremamente recomendado que a solução de arranjo em meios de pagamento seja alinhada à contabilidade de cada lojista.</p>
+                            </div>
                         </div>
                     </div>
-
-                    <!-- Tabela 2: Athos Pay -->
-                    <div class="bg-white rounded-3xl shadow-soft border border-athos-orange/30 overflow-hidden relative">
-                        <div class="bg-gradient-to-r from-athos-orange to-yellow-500 text-white py-4 px-6 flex justify-between items-center">
-                            <h3 class="text-lg font-bold flex items-center gap-2"><i class="fas fa-check-circle opacity-90"></i> Tecnologia Athos Pay</h3>
-                            <span class="text-xs font-bold bg-white/20 px-2 py-1 rounded">Solução Split</span>
-                        </div>
-                        <div class="table-container overflow-x-auto w-full">
-                            <table class="w-full text-left whitespace-nowrap min-w-[500px]">
-                                <thead class="bg-orange-50/50">
-                                    <tr>
-                                        <th class="py-3 px-6 font-bold text-orange-900 uppercase text-xs tracking-wider">Modalidade</th>
-                                        <th class="py-3 px-6 font-bold text-orange-900 uppercase text-xs tracking-wider text-center">Taxa Balcão</th>
-                                        <th class="py-3 px-6 font-bold text-green-700 uppercase text-xs tracking-wider text-center">Blindagem (Split)</th>
-                                        <th class="py-3 px-6 font-extrabold text-orange-950 uppercase text-xs tracking-wider text-right bg-orange-100/50">
-                                            C.E.T. Total
-                                            <span class="block text-[10px] text-orange-800/80 font-semibold normal-case tracking-normal mt-0.5">(Custo Efetivo Total)</span>
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody class="divide-y divide-orange-100 text-sm">
-                                    <tr class="hover:bg-orange-50/50 transition">
-                                        <td class="py-4 px-6 font-semibold text-slate-800">Débito</td>
-                                        <td class="py-4 px-6 text-center font-medium" id="out-tx-deb-athos">0,00%</td>
-                                        <td class="py-4 px-6 text-center text-green-600 font-bold bg-green-50/30" id="out-bli-deb">0,00%</td>
-                                        <td class="py-4 px-6 text-right font-extrabold text-athos-orange bg-orange-50/30" id="out-cet-deb-athos">0,00%</td>
-                                    </tr>
-                                    <tr class="hover:bg-orange-50/50 transition">
-                                        <td class="py-4 px-6 font-semibold text-slate-800">Crédito 1x antecipado</td>
-                                        <td class="py-4 px-6 text-center font-medium" id="out-tx-cred-athos">0,00%</td>
-                                        <td class="py-4 px-6 text-center text-green-600 font-bold bg-green-50/30" id="out-bli-cred">0,00%</td>
-                                        <td class="py-4 px-6 text-right font-extrabold text-athos-orange bg-orange-50/30" id="out-cet-cred-athos">0,00%</td>
-                                    </tr>
-                                    <tr class="hover:bg-orange-50/50 transition">
-                                        <td class="py-4 px-6 font-semibold text-slate-800">Pix</td>
-                                        <td class="py-4 px-6 text-center font-medium" id="out-tx-pix-athos">0,00%</td>
-                                        <td class="py-4 px-6 text-center text-green-600 font-bold bg-green-50/30" id="out-bli-pix">0,00%</td>
-                                        <td class="py-4 px-6 text-right font-extrabold text-athos-orange bg-orange-50/30" id="out-cet-pix-athos">0,00%</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-
-                    <!-- Tabela 3 & 4 Combinadas: A Grande Revelação -->
-                    <div class="bg-athos-dark rounded-3xl shadow-2xl overflow-hidden border border-slate-700 mt-4 relative">
-                        <!-- Decorativo -->
-                        <div class="absolute top-0 right-0 w-32 h-32 bg-green-500 rounded-full blur-3xl opacity-20 pointer-events-none"></div>
-                        
-                        <div class="bg-slate-900 border-b border-slate-700 py-5 px-6">
-                            <h3 class="text-xl font-extrabold text-white text-center flex items-center justify-center gap-3">
-                                <i class="fas fa-trophy text-yellow-400"></i> Comparativo Final e Economia Gerada
-                            </h3>
-                        </div>
-                        
-                        <div class="table-container overflow-x-auto w-full">
-                            <table class="w-full text-left whitespace-nowrap min-w-[650px]">
-                                <thead class="bg-slate-800">
-                                    <tr>
-                                        <th class="py-4 px-6 font-bold text-slate-300 uppercase text-[11px] tracking-wider">Modalidade</th>
-                                        <th class="py-4 px-6 font-bold text-athos-salmon uppercase text-[11px] tracking-wider text-center bg-slate-800/80">
-                                            Custo Atual
-                                            <span class="block text-[9px] text-slate-400 font-semibold normal-case tracking-normal mt-0.5">(Em Reais)</span>
-                                        </th>
-                                        <th class="py-4 px-6 font-bold text-athos-orange uppercase text-[11px] tracking-wider text-center bg-slate-800/80">
-                                            Custo Athos
-                                            <span class="block text-[9px] text-slate-400 font-semibold normal-case tracking-normal mt-0.5">(Em Reais)</span>
-                                        </th>
-                                        <th class="py-4 px-6 font-bold text-green-400 uppercase text-[11px] tracking-wider text-center">Diferença (%)</th>
-                                        <th class="py-4 px-6 font-extrabold text-white uppercase text-[11px] tracking-wider text-right bg-slate-900">Lucro Adicional</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="divide-y divide-slate-700/50 text-sm">
-                                    <tr class="hover:bg-slate-800/50 transition">
-                                        <td class="py-4 px-6 font-semibold text-slate-200">Débito <span class="block text-xs text-slate-500 font-normal mt-0.5" id="eco-tpv-deb">R$ 0,00</span></td>
-                                        <td class="py-4 px-6 text-center font-bold text-athos-salmon" id="comp-custo-deb-atual">R$ 0,00</td>
-                                        <td class="py-4 px-6 text-center font-bold text-athos-orange" id="comp-custo-deb-athos">R$ 0,00</td>
-                                        <td class="py-4 px-6 text-center font-extrabold text-green-400 bg-green-400/5" id="comp-dif-deb">0,00%</td>
-                                        <td class="py-4 px-6 text-right font-bold text-green-400 bg-slate-900" id="eco-lucro-deb">R$ 0,00</td>
-                                    </tr>
-                                    <tr class="hover:bg-slate-800/50 transition">
-                                        <td class="py-4 px-6 font-semibold text-slate-200">Crédito <span class="block text-xs text-slate-500 font-normal mt-0.5" id="eco-tpv-cred">R$ 0,00</span></td>
-                                        <td class="py-4 px-6 text-center font-bold text-athos-salmon" id="comp-custo-cred-atual">R$ 0,00</td>
-                                        <td class="py-4 px-6 text-center font-bold text-athos-orange" id="comp-custo-cred-athos">R$ 0,00</td>
-                                        <td class="py-4 px-6 text-center font-extrabold text-green-400 bg-green-400/5" id="comp-dif-cred">0,00%</td>
-                                        <td class="py-4 px-6 text-right font-bold text-green-400 bg-slate-900" id="eco-lucro-cred">R$ 0,00</td>
-                                    </tr>
-                                    <tr class="hover:bg-slate-800/50 transition">
-                                        <td class="py-4 px-6 font-semibold text-slate-200">Pix <span class="block text-xs text-slate-500 font-normal mt-0.5" id="eco-tpv-pix">R$ 0,00</span></td>
-                                        <td class="py-4 px-6 text-center font-bold text-athos-salmon" id="comp-custo-pix-atual">R$ 0,00</td>
-                                        <td class="py-4 px-6 text-center font-bold text-athos-orange" id="comp-custo-pix-athos">R$ 0,00</td>
-                                        <td class="py-4 px-6 text-center font-extrabold text-green-400 bg-green-400/5" id="comp-dif-pix">0,00%</td>
-                                        <td class="py-4 px-6 text-right font-bold text-green-400 bg-slate-900" id="eco-lucro-pix">R$ 0,00</td>
-                                    </tr>
-                                    
-                                    <!-- Totais -->
-                                    <tr class="bg-slate-900">
-                                        <td colspan="4" class="py-5 px-6 text-right font-bold text-slate-300 uppercase tracking-widest text-xs">
-                                            Seu Lucro Líquido Mensal
-                                        </td>
-                                        <td class="py-5 px-6 text-right font-black text-2xl text-green-400 value-animate" id="eco-total-mensal">
-                                            R$ 0,00
-                                        </td>
-                                    </tr>
-                                    <tr class="bg-gradient-to-r from-slate-900 to-green-900/40">
-                                        <td colspan="4" class="py-6 px-6 text-right font-black text-white uppercase tracking-widest text-sm">
-                                            Sua Economia Anual
-                                        </td>
-                                        <td class="py-6 px-6 text-right font-black text-3xl md:text-4xl text-green-300 drop-shadow-md value-animate" id="eco-total-anual">
-                                            R$ 0,00
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-
                 </div>
             </div>
-        </section>
-
-        <!-- Call to Action -->
-        <div class="text-center py-10">
-            <h2 class="text-3xl md:text-4xl font-extrabold text-athos-dark mb-4">Vamos concretizar esta economia?</h2>
-            <p class="text-slate-600 mb-10 max-w-2xl mx-auto text-lg">Com o volume de faturamento da sua empresa, cada dia sem o split representa capital perdido em impostos desnecessários.</p>
-            
-            <div class="max-w-3xl mx-auto bg-gradient-to-br from-white to-slate-50 p-8 md:p-10 rounded-[2.5rem] shadow-xl border border-athos-orange/20 relative overflow-hidden text-left transform transition duration-500 hover:-translate-y-2 hover:shadow-2xl">
-                <div class="absolute -bottom-10 -right-10 opacity-[0.03] text-athos-orange text-[15rem] leading-none pointer-events-none"><i class="fas fa-mobile-alt"></i></div>
-                <div class="relative z-10 flex flex-col md:flex-row items-center md:items-start gap-8">
-                    <div class="bg-gradient-to-br from-orange-100 to-orange-50 text-athos-orange w-24 h-24 rounded-3xl flex items-center justify-center text-4xl flex-shrink-0 shadow-inner border border-orange-200">
-                        <i class="fas fa-mobile-screen-button"></i>
+            <div class="col-span-5">
+                <div class="content-card p-5 h-full">
+                    <h2 class="text-2xl font-semibold mb-4 text-green-300">
+                        <i class="fas fa-calculator mr-2"></i>Simuladores Disponíveis
+                    </h2>
+                    <div class="mb-4">
+                        <div class="info-card p-4 mb-3">
+                            <h3 class="text-lg font-semibold text-white mb-2">Simples Nacional</h3>
+                            <p class="text-sm text-blue-200">Ideal para micro e pequenas empresas com faturamento até R$ 4,8 milhões/ano.</p>
+                        </div>
+                        <div class="info-card p-4 mb-3">
+                            <h3 class="text-lg font-semibold text-white mb-2">Lucro Presumido</h3>
+                            <p class="text-sm text-blue-200">Foco na redução da base de presunção, com maior economia para empresas de serviços.</p>
+                        </div>
+                        <div class="info-card p-4">
+                            <h3 class="text-lg font-semibold text-white mb-2">Lucro Real</h3>
+                            <p class="text-sm text-blue-200">Otimização tributária complexa para empresas com alto volume e margem.</p>
+                        </div>
                     </div>
-                    <div>
-                        <h3 class="text-2xl md:text-3xl font-extrabold text-slate-800 mb-3 text-center md:text-left tracking-tight">Tudo isso na palma da sua mão!</h3>
-                        <p class="text-slate-600 text-center md:text-left text-lg leading-relaxed">
-                            O empresário tem controle total e liberdade. Realize a gestão completa do seu dinheiro, cadastre novos parceiros para o split e acompanhe os seus recebimentos em tempo real, <strong>diretamente pelo aplicativo no seu celular ou portal web</strong>.
+                    <div class="bg-blue-900 bg-opacity-40 rounded-lg p-4 mt-4">
+                        <p class="text-sm text-yellow-200 font-semibold mb-2">
+                            <i class="fas fa-info-circle mr-1"></i> OBSERVAÇÃO IMPORTANTE:
+                        </p>
+                        <p class="text-xs text-blue-200">
+                            A alíquota do Simples Nacional inclusa neste simulador não contém os fatores de dedução de alíquota, devido às variações dos dedutores de acordo com cada faixa de faturamento, folha de pagamento e volume de funcionários.
                         </p>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
+</body></html>`;
 
-    </main>
-
-    <footer class="bg-slate-900 text-slate-400 py-10 text-center text-sm border-t border-slate-800">
-        <div class="mb-6 flex justify-center">
-            <div class="px-6 py-2 bg-white/5 rounded-full border border-white/10">
-                <span class="font-black text-xl text-white tracking-widest"><span class="text-athos-orange">ATHOS</span> PAY</span>
+                // SLIDE 2
+                const slide2Raw = `
+<html lang="pt-BR"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulador Dinâmico de Split de Recebíveis</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"><\/script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"><\/script>
+    <style>
+        body { font-family: 'Montserrat', sans-serif; margin: 0; padding: 0; }
+        .slide-bg { background: linear-gradient(135deg, #10104f 0%, #003D7B 100%); width: 1280px; height: 720px; overflow: hidden; position: relative; }
+        .accent-line { position: absolute; height: 720px; width: 300px; background: linear-gradient(135deg, #15f35b 0%, #1599ff 100%); transform: skewX(-20deg) translateX(-150px); opacity: 0.2; top: 0; left: 0; }
+        .simulator-card { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(5px); border-radius: 15px; border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); }
+        .result-card { background: rgba(0, 61, 123, 0.3); border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.1); transition: all 0.3s ease; }
+        .result-card:hover { transform: translateY(-3px); box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2); }
+        .chart-container { position: relative; height: 150px; width: 100%; }
+        .faixa-indicator { background: rgba(0, 61, 123, 0.4); border-left: 3px solid #15f35b; border-radius: 6px; }
+        input[type=range] { -webkit-appearance: none; width: 100%; background: transparent; }
+        input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; height: 20px; width: 20px; border-radius: 50%; background: #15f35b; cursor: pointer; margin-top: -8px; box-shadow: 0 0 5px rgba(21, 243, 91, 0.5); }
+        input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 4px; cursor: pointer; background: linear-gradient(to right, #15f35b, #1599ff); border-radius: 25px; }
+        input[type=range]:focus { outline: none; }
+        select { background-color: rgba(0, 61, 123, 0.3); background-image: linear-gradient(to bottom, rgba(21, 243, 91, 0.1), rgba(0, 61, 123, 0.3)); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 8px; padding: 8px 12px; color: white; appearance: none; background-repeat: no-repeat; background-position: right 10px center; background-size: 12px; padding-right: 30px; cursor: pointer; }
+        select:focus { outline: none; border-color: #15f35b; box-shadow: 0 0 0 2px rgba(21, 243, 91, 0.3); }
+        .slider-label { font-size: 0.85rem; color: #1599ff; margin: 4px 0; }
+    </style>
+</head>
+<body>
+    <div class="slide-bg flex flex-col justify-start items-start p-8 text-white">
+        <div class="accent-line"></div>
+        <div class="absolute top-6 right-6">
+            <img src="https://athospay.github.io/teste/logocolorida.svg" alt="Athospay Logo" class="h-14">
+        </div>
+        <div class="mb-4 z-10">
+            <h1 class="text-4xl font-bold mb-2">Simulador de Split para Simples Nacional</h1>
+            <div class="h-1 w-40 bg-gradient-to-r from-green-400 to-blue-500 mt-2" style="background: linear-gradient(90deg, #15f35b 0%, #1599ff 100%);"></div>
+        </div>
+        <div class="w-full grid grid-cols-12 gap-6 z-10">
+            <div class="col-span-5">
+                <div class="simulator-card p-5 h-full">
+                    <div class="mb-4">
+                        <label class="block text-blue-200 mb-2">Escolha o Anexo do Simples Nacional:</label>
+                        <select id="anexo-select" class="w-full text-lg">
+                            <option value="1" selected="">Anexo I - Comércio</option>
+                            <option value="2">Anexo II - Indústria</option>
+                            <option value="3">Anexo III - Serviços</option>
+                            <option value="4">Anexo IV - Serviços</option>
+                            <option value="5">Anexo V - Serviços/Clínicas/TI</option>
+                        </select>
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-blue-200 mb-2">Faturamento Mensal Declarado:</label>
+                        <p class="text-2xl font-bold mb-2" id="faturamento-value">R$&nbsp;52.000,00</p>
+                        <input type="range" id="faturamento-slider" min="1000" max="400000" step="1000" value="76000" class="w-full">
+                        <div class="flex justify-between text-xs text-blue-200">
+                            <span>R$ 1 mil</span>
+                            <span>R$ 400 mil</span>
+                        </div>
+                        <p class="slider-label mt-1">Ajuste o valor arrastando o controle deslizante</p>
+                    </div>
+                    <div class="faixa-indicator p-3 mb-4">
+                        <p class="text-sm text-blue-200 mb-1">Faixa de faturamento atual:</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-green-300 font-semibold" id="faixa-atual">3ª Faixa (R$ 360 mil a R$ 720 mil/ano)</span>
+                        </div>
+                        <p class="text-xs text-green-300 mt-1 font-semibold" id="faixa-split-info">Com Split: Reduz para 1ª Faixa (até R$ 180 mil/ano)</p>
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-blue-200 mb-2">Percentual de Repasse a Terceiros:</label>
+                        <p class="text-2xl font-bold mb-2" id="repasse-value">72,00%</p>
+                        <input type="range" id="repasse-slider" min="0" max="90" step="1" value="50" class="w-full">
+                        <div class="flex justify-between text-xs text-blue-200">
+                            <span>0%</span>
+                            <span>90%</span>
+                        </div>
+                        <p class="slider-label mt-1">Médicos, parceiros, fornecedores, royalties, etc.</p>
+                    </div>
+                    <div class="mt-4 p-3 bg-blue-900 bg-opacity-20 rounded-lg">
+                        <p class="text-sm text-blue-200" style="font-size: 14px;">O simulador estima a economia com base na tabela do Simples Nacional e no percentual de repasse. Confirme sempre com seu contador antes de decidir.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-span-7">
+                <div class="simulator-card p-5 h-full">
+                    <h2 class="text-2xl font-semibold mb-4 text-green-300">Resultados da Simulação</h2>
+                    <div class="grid grid-cols-2 gap-4 mb-4">
+                        <div class="result-card p-4">
+                            <p class="text-sm text-blue-200 mb-1">Alíquota Original do Simples:</p>
+                            <p class="text-3xl font-bold text-white" id="aliquota-original">13,50%</p>
+                            <p class="text-xs text-blue-200 mt-1">Sem aplicação do Split de Recebíveis</p>
+                        </div>
+                        <div class="result-card p-4">
+                            <p class="text-sm text-blue-200 mb-1">Alíquota Ajustada com Split:</p>
+                            <p class="text-3xl font-bold text-green-400" id="aliquota-ajustada">6,00%</p>
+                            <p class="text-xs text-green-300 mt-1">Faixa tributária mais vantajosa</p>
+                        </div>
+                        <div class="result-card p-4">
+                            <p class="text-sm text-blue-200 mb-1">Economia Mensal:</p>
+                            <p class="text-3xl font-bold text-green-400" id="economia-mensal">R$&nbsp;6.146,40</p>
+                            <p class="text-xs text-green-300 mt-1">Valor líquido preservado mensalmente</p>
+                        </div>
+                        <div class="result-card p-4">
+                            <p class="text-sm text-blue-200 mb-1">Economia em 12 meses:</p>
+                            <p class="text-3xl font-bold text-green-400" id="economia-anual">R$&nbsp;73.756,80</p>
+                            <p class="text-xs text-green-300 mt-1">Impacto total anual no seu negócio</p>
+                        </div>
+                    </div>
+                    <div class="mt-2">
+                        <p class="text-lg font-semibold mb-2 text-blue-200">Comparação de Cenários:</p>
+                        <div class="chart-container">
+                            <canvas id="tax-chart" width="723" height="165" style="display: block; box-sizing: border-box; height: 150px; width: 657px;"></canvas>
+                        </div>
+                    </div>
+                    <div class="mt-4 bg-gradient-to-r from-blue-900 to-blue-800 p-3 rounded-lg">
+                        <p class="font-semibold flex items-center">
+                            <i class="fas fa-chart-line text-green-300 mr-2"></i>
+                            A economia real ultrapassa <span class="text-green-300 text-xl ml-1" id="reducao-destaque">87,56%</span> da carga tributária!
+                        </p>
+                    </div>
+                </div>
             </div>
         </div>
-        <p>&copy; 2026 Athos Pay. Todos os direitos reservados.</p>
-        <p class="mt-2 font-medium text-slate-500">Soluções Customizadas e Inteligência Financeira.</p>
-    </footer>
-
-    <!-- Botão Flutuante WhatsApp -->
-    <a href="#" class="float-wpp" title="Falar com Especialista">
-        <i class="fab fa-whatsapp"></i>
-    </a>
-
+    </div>
     <script>
-        // Formatações
-        const formataMoeda = (valor) => new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(valor);
-        const formataNum = (valor) => new Intl.NumberFormat('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(valor);
-        const formataPerc = (valor) => formataNum(valor) + '%';
-
-        // Taxas Fixas da Athos Pay (Hardcoded)
-        const TX_DEB_ATHOS = 1.05;
-        const TX_CRED_ATHOS = 3.27;
-        const TX_PIX_ATHOS = 0.99;
-        
-        // Blindagem específica por modalidade
-        const BLINDAGEM_DEB_ATHOS = 2.0;
-        const BLINDAGEM_CRED_ATHOS = 3.0;
-        const BLINDAGEM_PIX_ATHOS = 2.0;
-
-        function calcularTabelas() {
-            // Leituras dos inputs (Apenas o que o cliente edita)
-            const tpvDeb = parseFloat(document.getElementById('in-tpv-deb').value) || 0;
-            const tpvCred = parseFloat(document.getElementById('in-tpv-cred').value) || 0;
-            const tpvPix = parseFloat(document.getElementById('in-tpv-pix').value) || 0;
-            
-            const txDebAtual = parseFloat(document.getElementById('in-tx-deb-atual').value) || 0;
-            const txCredAtual = parseFloat(document.getElementById('in-tx-cred-atual').value) || 0;
-            const txPixAtual = parseFloat(document.getElementById('in-tx-pix-atual').value) || 0;
-            const imposto = parseFloat(document.getElementById('in-imposto').value) || 0;
-
-            // --- TABELA 1: Máquina Atual ---
-            document.getElementById('out-tx-deb-atual').innerText = formataPerc(txDebAtual);
-            document.getElementById('out-tx-cred-atual').innerText = formataPerc(txCredAtual);
-            document.getElementById('out-tx-pix-atual').innerText = formataPerc(txPixAtual);
-            
-            document.getElementById('out-imp-deb').innerText = formataPerc(imposto);
-            document.getElementById('out-imp-cred').innerText = formataPerc(imposto);
-            document.getElementById('out-imp-pix').innerText = formataPerc(imposto);
-            
-            const cetDebAtual = txDebAtual + imposto;
-            const cetCredAtual = txCredAtual + imposto;
-            const cetPixAtual = txPixAtual + imposto;
-            
-            document.getElementById('out-cet-deb-atual').innerText = formataPerc(cetDebAtual);
-            document.getElementById('out-cet-cred-atual').innerText = formataPerc(cetCredAtual);
-            document.getElementById('out-cet-pix-atual').innerText = formataPerc(cetPixAtual);
-
-            // --- TABELA 2: Athos Pay ---
-            document.getElementById('out-tx-deb-athos').innerText = formataPerc(TX_DEB_ATHOS);
-            document.getElementById('out-tx-cred-athos').innerText = formataPerc(TX_CRED_ATHOS);
-            document.getElementById('out-tx-pix-athos').innerText = formataPerc(TX_PIX_ATHOS);
-            
-            document.getElementById('out-bli-deb').innerText = formataPerc(BLINDAGEM_DEB_ATHOS);
-            document.getElementById('out-bli-cred').innerText = formataPerc(BLINDAGEM_CRED_ATHOS);
-            document.getElementById('out-bli-pix').innerText = formataPerc(BLINDAGEM_PIX_ATHOS);
-
-            const cetDebAthos = TX_DEB_ATHOS + BLINDAGEM_DEB_ATHOS;
-            const cetCredAthos = TX_CRED_ATHOS + BLINDAGEM_CRED_ATHOS;
-            const cetPixAthos = TX_PIX_ATHOS + BLINDAGEM_PIX_ATHOS;
-
-            document.getElementById('out-cet-deb-athos').innerText = formataPerc(cetDebAthos);
-            document.getElementById('out-cet-cred-athos').innerText = formataPerc(cetCredAthos);
-            document.getElementById('out-cet-pix-athos').innerText = formataPerc(cetPixAthos);
-
-            // --- TABELA 3 & 4 (Combinadas) ---
-            // Calcular os custos em Reais
-            const custoDebAtual = tpvDeb * (cetDebAtual / 100);
-            const custoCredAtual = tpvCred * (cetCredAtual / 100);
-            const custoPixAtual = tpvPix * (cetPixAtual / 100);
-            
-            const custoDebAthos = tpvDeb * (cetDebAthos / 100);
-            const custoCredAthos = tpvCred * (cetCredAthos / 100);
-            const custoPixAthos = tpvPix * (cetPixAthos / 100);
-
-            document.getElementById('comp-custo-deb-atual').innerText = formataMoeda(custoDebAtual);
-            document.getElementById('comp-custo-cred-atual').innerText = formataMoeda(custoCredAtual);
-            document.getElementById('comp-custo-pix-atual').innerText = formataMoeda(custoPixAtual);
-            
-            document.getElementById('comp-custo-deb-athos').innerText = formataMoeda(custoDebAthos);
-            document.getElementById('comp-custo-cred-athos').innerText = formataMoeda(custoCredAthos);
-            document.getElementById('comp-custo-pix-athos').innerText = formataMoeda(custoPixAthos);
-
-            const difDeb = cetDebAtual - cetDebAthos;
-            const difCred = cetCredAtual - cetCredAthos;
-            const difPix = cetPixAtual - cetPixAthos;
-
-            document.getElementById('comp-dif-deb').innerText = formataPerc(difDeb);
-            document.getElementById('comp-dif-cred').innerText = formataPerc(difCred);
-            document.getElementById('comp-dif-pix').innerText = formataPerc(difPix);
-
-            document.getElementById('eco-tpv-deb').innerText = 'TPV: R$ ' + formataNum(tpvDeb);
-            document.getElementById('eco-tpv-cred').innerText = 'TPV: R$ ' + formataNum(tpvCred);
-            document.getElementById('eco-tpv-pix').innerText = 'TPV: R$ ' + formataNum(tpvPix);
-
-            const lucroDeb = tpvDeb * (difDeb / 100);
-            const lucroCred = tpvCred * (difCred / 100);
-            const lucroPix = tpvPix * (difPix / 100);
-
-            document.getElementById('eco-lucro-deb').innerText = '+ ' + formataMoeda(lucroDeb);
-            document.getElementById('eco-lucro-cred').innerText = '+ ' + formataMoeda(lucroCred);
-            document.getElementById('eco-lucro-pix').innerText = '+ ' + formataMoeda(lucroPix);
-
-            const lucroMensalTotal = lucroDeb + lucroCred + lucroPix;
-            document.getElementById('eco-total-mensal').innerText = formataMoeda(lucroMensalTotal);
-
-            // Economia Anual
-            const lucroAnualTotal = lucroMensalTotal * 12;
-            document.getElementById('eco-total-anual').innerText = formataMoeda(lucroAnualTotal);
+        const taxRates = {
+            "1": { "180000": 0.04, "360000": 0.073, "720000": 0.095, "1800000": 0.107, "3600000": 0.143, "4800000": 0.190 },
+            "2": { "180000": 0.045, "360000": 0.078, "720000": 0.100, "1800000": 0.112, "3600000": 0.147, "4800000": 0.300 },
+            "3": { "180000": 0.060, "360000": 0.112, "720000": 0.135, "1800000": 0.160, "3600000": 0.210, "4800000": 0.330 },
+            "4": { "180000": 0.045, "360000": 0.090, "720000": 0.102, "1800000": 0.140, "3600000": 0.220, "4800000": 0.330 },
+            "5": { "180000": 0.155, "360000": 0.180, "720000": 0.195, "1800000": 0.205, "3600000": 0.230, "4800000": 0.305 }
+        };
+        const faixasValores = { "1": 180000, "2": 360000, "3": 720000, "4": 1800000, "5": 3600000, "6": 4800000 };
+        const faixasDescricao = {
+            "1": "1ª Faixa (até R$ 180 mil/ano)",
+            "2": "2ª Faixa (R$ 180 mil a R$ 360 mil/ano)",
+            "3": "3ª Faixa (R$ 360 mil a R$ 720 mil/ano)",
+            "4": "4ª Faixa (R$ 720 mil a R$ 1,8 milhão/ano)",
+            "5": "5ª Faixa (R$ 1,8 milhão a R$ 3,6 milhões/ano)",
+            "6": "6ª Faixa (R$ 3,6 milhões a R$ 4,8 milhões/ano)"
+        };
+        function formatCurrency(value) { return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL', minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(value); }
+        function formatPercentage(value) { return (value * 100).toFixed(2).replace('.', ',') + '%'; }
+        function getTaxRate(annualRevenue, annex) {
+            let taxRate = 0;
+            if (annualRevenue <= 180000) taxRate = taxRates[annex]["180000"];
+            else if (annualRevenue <= 360000) taxRate = taxRates[annex]["360000"];
+            else if (annualRevenue <= 720000) taxRate = taxRates[annex]["720000"];
+            else if (annualRevenue <= 1800000) taxRate = taxRates[annex]["1800000"];
+            else if (annualRevenue <= 3600000) taxRate = taxRates[annex]["3600000"];
+            else taxRate = taxRates[annex]["4800000"];
+            return taxRate;
         }
-
-        // Listeners para atualizar automaticamente ao digitar
-        const inputs = document.querySelectorAll('input[type="number"]');
-        inputs.forEach(input => {
-            input.addEventListener('input', calcularTabelas);
+        function getFaixa(annualRevenue) {
+            if (annualRevenue <= 180000) return "1";
+            else if (annualRevenue <= 360000) return "2";
+            else if (annualRevenue <= 720000) return "3";
+            else if (annualRevenue <= 1800000) return "4";
+            else if (annualRevenue <= 3600000) return "5";
+            else return "6";
+        }
+        let taxChart;
+        function initChart() {
+            const ctx = document.getElementById('tax-chart').getContext('2d');
+            if (taxChart) taxChart.destroy();
+            taxChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Sem Split', 'Com Split'],
+                    datasets: [{
+                        data: [8000, 3300],
+                        backgroundColor: ['rgba(255, 99, 132, 0.7)', 'rgba(21, 243, 91, 0.7)'],
+                        borderColor: ['rgba(255, 99, 132, 1)', 'rgba(21, 243, 91, 1)'],
+                        borderWidth: 1
+                    }]
+                },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { callbacks: { label: function(context) { return formatCurrency(context.parsed.y); } } }, datalabels: { color: '#fff', font: { weight: 'bold' }, formatter: function(value) { return formatCurrency(value); }, display: true, anchor: 'end', align: 'top' } }, scales: { y: { beginAtZero: true, ticks: { display: false }, grid: { display: false } }, x: { grid: { display: false } } }, animation: { duration: 500 } },
+                plugins: [ChartDataLabels]
+            });
+        }
+        function calculateSimulation() {
+            const anexo = document.getElementById('anexo-select').value;
+            const faturamento = parseFloat(document.getElementById('faturamento-slider').value);
+            const percentualRepasse = parseFloat(document.getElementById('repasse-slider').value) / 100;
+            const faturamentoAnual = faturamento * 12;
+            const faturamentoSplit = faturamento * (1 - percentualRepasse) * 12;
+            const faixaAtual = getFaixa(faturamentoAnual);
+            const faixaSplit = getFaixa(faturamentoSplit);
+            
+            document.getElementById('faixa-atual').textContent = faixasDescricao[faixaAtual];
+            if (faixaAtual !== faixaSplit) {
+                document.getElementById('faixa-split-info').textContent = 'Com Split: Reduz para ' + faixasDescricao[faixaSplit];
+                document.getElementById('faixa-split-info').className = 'text-xs text-green-300 mt-1 font-semibold';
+            } else {
+                document.getElementById('faixa-split-info').textContent = 'Com Split: Mantém-se na ' + faixasDescricao[faixaSplit];
+                document.getElementById('faixa-split-info').className = 'text-xs text-blue-300 mt-1';
+            }
+            
+            const aliquotaOriginal = getTaxRate(faturamentoAnual, anexo);
+            const aliquotaSplit = getTaxRate(faturamentoSplit, anexo);
+            const impostoOriginal = faturamentoAnual * aliquotaOriginal;
+            const impostoSplit = faturamentoSplit * aliquotaSplit;
+            const impostoOriginalMensal = impostoOriginal / 12;
+            const impostoSplitMensal = impostoSplit / 12;
+            const economiaMensal = impostoOriginalMensal - impostoSplitMensal;
+            const economiaAnual = economiaMensal * 12;
+            const reducaoPercentual = (impostoOriginal - impostoSplit) / impostoOriginal;
+            
+            document.getElementById('aliquota-original').textContent = formatPercentage(aliquotaOriginal);
+            document.getElementById('aliquota-ajustada').textContent = formatPercentage(aliquotaSplit);
+            document.getElementById('economia-mensal').textContent = formatCurrency(economiaMensal);
+            document.getElementById('economia-anual').textContent = formatCurrency(economiaAnual);
+            document.getElementById('reducao-destaque').textContent = formatPercentage(reducaoPercentual);
+            
+            if (taxChart) {
+                taxChart.data.datasets[0].data = [impostoOriginalMensal, impostoSplitMensal];
+                taxChart.update();
+            }
+        }
+        document.addEventListener('DOMContentLoaded', function() {
+            initChart();
+            document.getElementById('anexo-select').value = "1";
+            document.getElementById('faturamento-slider').value = 76000;
+            document.getElementById('faturamento-value').textContent = formatCurrency(76000);
+            document.getElementById('repasse-slider').value = 50;
+            document.getElementById('repasse-value').textContent = "50,00%";
+            
+            document.getElementById('faturamento-slider').addEventListener('input', function() {
+                document.getElementById('faturamento-value').textContent = formatCurrency(parseFloat(this.value));
+                calculateSimulation();
+            });
+            document.getElementById('repasse-slider').addEventListener('input', function() {
+                document.getElementById('repasse-value').textContent = (parseFloat(this.value)).toFixed(2).replace('.', ',') + '%';
+                calculateSimulation();
+            });
+            document.getElementById('anexo-select').addEventListener('change', calculateSimulation);
+            calculateSimulation();
         });
+    <\/script>
+</body></html>`;
 
-        // Calculo inicial
-        window.addEventListener('DOMContentLoaded', calcularTabelas);
+                // SLIDE 3
+                const slide3Raw = `
+<html lang="pt-BR"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulador Dinâmico de Lucro Presumido</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"><\/script>
+    <style>
+        body { font-family: 'Montserrat', sans-serif; margin: 0; padding: 0; }
+        .slide-bg { background: linear-gradient(135deg, #10104f 0%, #003D7B 100%); width: 1280px; height: 720px; overflow: hidden; position: relative; }
+        .accent-line { position: absolute; height: 720px; width: 300px; background: linear-gradient(135deg, #15f35b 0%, #1599ff 100%); transform: skewX(-20deg) translateX(-150px); opacity: 0.2; top: 0; left: 0; }
+        .simulator-card { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(5px); border-radius: 15px; border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); }
+        .result-card { background: rgba(0, 61, 123, 0.3); border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.1); transition: all 0.3s ease; }
+        .result-card:hover { transform: translateY(-3px); box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2); }
+        .chart-container { position: relative; height: 200px; width: 100%; }
+        input[type=range] { -webkit-appearance: none; width: 100%; background: transparent; }
+        input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; height: 20px; width: 20px; border-radius: 50%; background: #15f35b; cursor: pointer; margin-top: -8px; box-shadow: 0 0 5px rgba(21, 243, 91, 0.5); }
+        input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 4px; cursor: pointer; background: linear-gradient(to right, #15f35b, #1599ff); border-radius: 25px; }
+        input[type=range]:focus { outline: none; }
+        .toggle-switch { position: relative; display: inline-block; width: 60px; height: 30px; }
+        .toggle-switch input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0, 61, 123, 0.5); transition: .4s; border-radius: 34px; }
+        .slider:before { position: absolute; content: ""; height: 22px; width: 22px; left: 4px; bottom: 4px; background-color: white; transition: .4s; border-radius: 50%; }
+        input:checked + .slider { background: linear-gradient(to right, #15f35b, #1599ff); }
+        input:checked + .slider:before { transform: translateX(30px); }
+        .slider-label { font-size: 0.85rem; color: #1599ff; margin: 4px 0; }
+        select { background-color: rgba(0, 61, 123, 0.3); background-image: linear-gradient(to bottom, rgba(21, 243, 91, 0.1), rgba(0, 61, 123, 0.3)); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 8px; padding: 8px 12px; color: white; appearance: none; background-repeat: no-repeat; background-position: right 10px center; background-size: 12px; padding-right: 30px; cursor: pointer; }
+        select:focus { outline: none; border-color: #15f35b; box-shadow: 0 0 0 2px rgba(21, 243, 91, 0.3); }
+    </style>
+</head>
+<body>
+    <div class="slide-bg flex flex-col justify-start items-start p-8 text-white">
+        <div class="accent-line"></div>
+        <div class="absolute top-6 right-6">
+            <img src="https://athospay.github.io/teste/logocolorida.svg" alt="Athospay Logo" class="h-14">
+        </div>
+        <div class="mb-4 z-10">
+            <h1 class="text-4xl font-bold mb-2">Simulador de Split para Lucro Presumido</h1>
+            <div class="h-1 w-40 bg-gradient-to-r from-green-400 to-blue-500 mt-2" style="background: linear-gradient(90deg, #15f35b 0%, #1599ff 100%);"></div>
+        </div>
+        <div class="w-full grid grid-cols-12 gap-6 z-10">
+            <div class="col-span-5">
+                <div class="simulator-card p-5 h-full">
+                    <div class="mb-4">
+                        <label class="block text-blue-200 mb-2">Tipo de Atividade:</label>
+                        <select id="atividade-select" class="w-full text-lg">
+                            <option value="comercio" selected="">Comércio (IRPJ 8% / CSLL 12%)</option>
+                            <option value="servicos">Serviços (IRPJ 32% / CSLL 32%)</option>
+                        </select>
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-blue-200 mb-2">Faturamento Mensal (R$):</label>
+                        <p class="text-2xl font-bold mb-2" id="faturamento-value">R$&nbsp;50.000,00</p>
+                        <input type="range" id="faturamento-slider" min="10000" max="1000000" step="5000" value="50000" class="w-full">
+                        <div class="flex justify-between text-xs text-blue-200">
+                            <span>R$ 10 mil</span>
+                            <span>R$ 1 milhão</span>
+                        </div>
+                        <p class="slider-label mt-1">Ajuste o valor arrastando o controle deslizante</p>
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-blue-200 mb-2">Percentual de Repasse a Terceiros:</label>
+                        <p class="text-2xl font-bold mb-2" id="repasse-value">50,00%</p>
+                        <input type="range" id="repasse-slider" min="0" max="90" step="1" value="50" class="w-full">
+                        <div class="flex justify-between text-xs text-blue-200">
+                            <span>0%</span>
+                            <span>90%</span>
+                        </div>
+                        <p class="slider-label mt-1">Parceiros, fornecedores, terceirizados, royalties, etc.</p>
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-blue-200 mb-2">Regime PIS/COFINS:</label>
+                        <div class="flex items-center">
+                            <span class="text-sm text-blue-200 mr-2">Cumulativo</span>
+                            <label class="toggle-switch mx-2">
+                                <input type="checkbox" id="regime-toggle">
+                                <span class="slider"></span>
+                            </label>
+                            <span class="text-sm text-blue-200 ml-2">Não-Cumulativo</span>
+                        </div>
+                        <p class="slider-label mt-1">PIS/COFINS: 0,65%/3,0% (Cumulativo) ou 1,65%/7,6% (Não-Cumulativo)</p>
+                    </div>
+                    <div class="mt-4 p-3 bg-blue-900 bg-opacity-20 rounded-lg">
+                        <p class="text-sm text-blue-200">O simulador estima a economia com base nas alíquotas do Lucro Presumido e no percentual de repasse.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-span-7">
+                <div class="simulator-card p-5 h-full">
+                    <h2 class="text-2xl font-semibold mb-4 text-green-300">Resultados da Simulação</h2>
+                    <div class="grid grid-cols-2 gap-4 mb-4">
+                        <div class="result-card p-4">
+                            <p class="text-sm text-blue-200 mb-1">Carga Tributária Original:</p>
+                            <p class="text-3xl font-bold text-white" id="carga-original">5,93%</p>
+                            <p class="text-xs text-blue-200 mt-1">IRPJ + CSLL + PIS + COFINS</p>
+                        </div>
+                        <div class="result-card p-4">
+                            <p class="text-sm text-blue-200 mb-1">Carga Tributária com Split:</p>
+                            <p class="text-3xl font-bold text-green-400" id="carga-ajustada">2,96%</p>
+                            <p class="text-xs text-green-300 mt-1">Redução em <span id="reducao-percentual">50,00%</span></p>
+                        </div>
+                        <div class="result-card p-4">
+                            <p class="text-sm text-blue-200 mb-1">Economia Mensal:</p>
+                            <p class="text-3xl font-bold text-green-400" id="economia-mensal">R$&nbsp;1.482,50</p>
+                            <p class="text-xs text-green-300 mt-1">Valor preservado mensalmente</p>
+                        </div>
+                        <div class="result-card p-4">
+                            <p class="text-sm text-blue-200 mb-1">Economia em 12 meses:</p>
+                            <p class="text-3xl font-bold text-green-400" id="economia-anual">R$&nbsp;17.790,00</p>
+                            <p class="text-xs text-green-300 mt-1">Impacto total anual no seu negócio</p>
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <div class="chart-container">
+                            <canvas id="tax-chart" width="723" height="220" style="display: block; box-sizing: border-box; height: 200px; width: 657px;"></canvas>
+                        </div>
+                    </div>
+                    <div class="mt-4 bg-gradient-to-r from-blue-900 to-blue-800 p-3 rounded-lg">
+                        <p class="font-semibold flex items-center">
+                            <i class="fas fa-chart-line text-green-300 mr-2"></i>
+                            A economia pode chegar a <span class="text-green-300 text-xl ml-1" id="reducao-destaque">50,00%</span> da carga tributária!
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        const taxConfig = { comercio: { irpj_base: 0.08, csll_base: 0.12 }, servicos: { irpj_base: 0.32, csll_base: 0.32 }, cumulativo: { pis: 0.0065, cofins: 0.03 }, nao_cumulativo: { pis: 0.0165, cofins: 0.076 }, irpj: 0.15, adicional: 0.10, csll: 0.09, limite_adicional_mensal: 20000 };
+        function formatCurrency(value) { return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL', minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(value); }
+        function formatPercentage(value) { return (value * 100).toFixed(2).replace('.', ',') + '%'; }
+        let taxChart;
+        function initChart() {
+            const ctx = document.getElementById('tax-chart').getContext('2d');
+            if (taxChart) taxChart.destroy();
+            taxChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Sem Split', 'Com Split'],
+                    datasets: [
+                        { label: 'IRPJ', data: [1000, 500], backgroundColor: 'rgba(255, 99, 132, 0.7)', borderColor: 'rgba(255, 99, 132, 1)', borderWidth: 1 },
+                        { label: 'CSLL', data: [540, 270], backgroundColor: 'rgba(255, 159, 64, 0.7)', borderColor: 'rgba(255, 159, 64, 1)', borderWidth: 1 },
+                        { label: 'PIS', data: [325, 162.5], backgroundColor: 'rgba(75, 192, 192, 0.7)', borderColor: 'rgba(75, 192, 192, 1)', borderWidth: 1 },
+                        { label: 'COFINS', data: [1500, 750], backgroundColor: 'rgba(54, 162, 235, 0.7)', borderColor: 'rgba(54, 162, 235, 1)', borderWidth: 1 }
+                    ]
+                },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: true, position: 'bottom', labels: { color: 'rgba(255, 255, 255, 0.8)', font: { size: 10 }, boxWidth: 12 } }, tooltip: { callbacks: { label: function(context) { let label = context.dataset.label || ''; if (label) { label += ': '; } label += formatCurrency(context.parsed.y); return label; } } } }, scales: { x: { stacked: true, grid: { display: false }, ticks: { color: 'rgba(255, 255, 255, 0.8)' } }, y: { stacked: true, beginAtZero: true, grid: { color: 'rgba(255, 255, 255, 0.1)' }, ticks: { color: 'rgba(255, 255, 255, 0.8)', callback: function(value) { return formatCurrency(value); } } } }, animation: { duration: 500 } }
+            });
+        }
+        function calculateSimulation() {
+            const tipoAtividade = document.getElementById('atividade-select').value;
+            const faturamento = parseFloat(document.getElementById('faturamento-slider').value);
+            const percentualRepasse = parseFloat(document.getElementById('repasse-slider').value) / 100;
+            const regimeNaoCumulativo = document.getElementById('regime-toggle').checked;
+            
+            const config = { irpj_base: taxConfig[tipoAtividade].irpj_base, csll_base: taxConfig[tipoAtividade].csll_base, pis: regimeNaoCumulativo ? taxConfig.nao_cumulativo.pis : taxConfig.cumulativo.pis, cofins: regimeNaoCumulativo ? taxConfig.nao_cumulativo.cofins : taxConfig.cumulativo.cofins, irpj: taxConfig.irpj, csll: taxConfig.csll, adicional: taxConfig.adicional };
+            
+            const baseIRPJ = faturamento * config.irpj_base;
+            const baseCSLL = faturamento * config.csll_base;
+            let irpjValue = baseIRPJ * config.irpj;
+            if (baseIRPJ > taxConfig.limite_adicional_mensal) { irpjValue += (baseIRPJ - taxConfig.limite_adicional_mensal) * config.adicional; }
+            const csllValue = baseCSLL * config.csll;
+            const pisValue = faturamento * config.pis;
+            const cofinsValue = faturamento * config.cofins;
+            const totalTaxes = irpjValue + csllValue + pisValue + cofinsValue;
+            
+            const faturamentoEfetivo = faturamento * (1 - percentualRepasse);
+            const baseIRPJSplit = faturamentoEfetivo * config.irpj_base;
+            const baseCSLLSplit = faturamentoEfetivo * config.csll_base;
+            let irpjValueSplit = baseIRPJSplit * config.irpj;
+            if (baseIRPJSplit > taxConfig.limite_adicional_mensal) { irpjValueSplit += (baseIRPJSplit - taxConfig.limite_adicional_mensal) * config.adicional; }
+            const csllValueSplit = baseCSLLSplit * config.csll;
+            const pisValueSplit = faturamentoEfetivo * config.pis;
+            const cofinsValueSplit = faturamentoEfetivo * config.cofins;
+            const totalTaxesSplit = irpjValueSplit + csllValueSplit + pisValueSplit + cofinsValueSplit;
+            
+            const economiaMensal = totalTaxes - totalTaxesSplit;
+            const economiaAnual = economiaMensal * 12;
+            const cargaOriginal = totalTaxes / faturamento;
+            const cargaAjustada = totalTaxesSplit / faturamento;
+            const reducaoPercentual = (totalTaxes - totalTaxesSplit) / totalTaxes;
+            
+            document.getElementById('carga-original').textContent = formatPercentage(cargaOriginal);
+            document.getElementById('carga-ajustada').textContent = formatPercentage(cargaAjustada);
+            document.getElementById('economia-mensal').textContent = formatCurrency(economiaMensal);
+            document.getElementById('economia-anual').textContent = formatCurrency(economiaAnual);
+            document.getElementById('reducao-percentual').textContent = formatPercentage(reducaoPercentual);
+            document.getElementById('reducao-destaque').textContent = formatPercentage(reducaoPercentual);
+            
+            if (taxChart) {
+                taxChart.data.datasets[0].data = [irpjValue, irpjValueSplit];
+                taxChart.data.datasets[1].data = [csllValue, csllValueSplit];
+                taxChart.data.datasets[2].data = [pisValue, pisValueSplit];
+                taxChart.data.datasets[3].data = [cofinsValue, cofinsValueSplit];
+                taxChart.update();
+            }
+        }
+        document.addEventListener('DOMContentLoaded', function() {
+            initChart();
+            document.getElementById('atividade-select').value = "comercio";
+            document.getElementById('faturamento-slider').value = 50000;
+            document.getElementById('faturamento-value').textContent = formatCurrency(50000);
+            document.getElementById('repasse-slider').value = 50;
+            document.getElementById('repasse-value').textContent = "50,00%";
+            document.getElementById('regime-toggle').checked = false;
+            
+            document.getElementById('faturamento-slider').addEventListener('input', function() {
+                document.getElementById('faturamento-value').textContent = formatCurrency(parseFloat(this.value));
+                calculateSimulation();
+            });
+            document.getElementById('repasse-slider').addEventListener('input', function() {
+                document.getElementById('repasse-value').textContent = (parseFloat(this.value)).toFixed(2).replace('.', ',') + '%';
+                calculateSimulation();
+            });
+            document.getElementById('atividade-select').addEventListener('change', calculateSimulation);
+            document.getElementById('regime-toggle').addEventListener('change', calculateSimulation);
+            calculateSimulation();
+        });
+    <\/script>
+</body></html>`;
+
+                // SLIDE 4
+                const slide4Raw = `
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Simulador Dinâmico de Lucro Real</title>
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"><\/script>
+<style>
+        body { font-family: 'Montserrat', sans-serif; margin: 0; padding: 0; }
+        .slide-bg { background: linear-gradient(135deg, #10104f 0%, #003D7B 100%); width: 1280px; height: 720px; overflow: hidden; position: relative; }
+        .accent-line { position: absolute; height: 720px; width: 300px; background: linear-gradient(135deg, #15f35b 0%, #1599ff 100%); transform: skewX(-20deg) translateX(-150px); opacity: 0.2; top: 0; left: 0; }
+        .simulator-card { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(5px); border-radius: 15px; border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); }
+        .result-card { background: rgba(0, 61, 123, 0.3); border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.1); transition: all 0.3s ease; }
+        .result-card:hover { transform: translateY(-3px); box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2); }
+        .chart-container { position: relative; height: 250px; width: 100%; }
+        input[type=range] { -webkit-appearance: none; width: 100%; background: transparent; }
+        input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; height: 18px; width: 18px; border-radius: 50%; background: #15f35b; cursor: pointer; margin-top: -7px; box-shadow: 0 0 5px rgba(21, 243, 91, 0.5); }
+        input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 4px; cursor: pointer; background: linear-gradient(to right, #15f35b, #1599ff); border-radius: 25px; }
+        input[type=range]:focus { outline: none; }
+        .toggle-switch { position: relative; display: inline-block; width: 54px; height: 28px; }
+        .toggle-switch input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0, 61, 123, 0.5); transition: .4s; border-radius: 34px; }
+        .slider:before { position: absolute; content: ""; height: 20px; width: 20px; left: 4px; bottom: 4px; background-color: white; transition: .4s; border-radius: 50%; }
+        input:checked + .slider { background: linear-gradient(to right, #15f35b, #1599ff); }
+        input:checked + .slider:before { transform: translateX(26px); }
+        .slider-label { font-size: 0.8rem; color: #1599ff; margin: 2px 0; }
+        select { background-color: rgba(0, 61, 123, 0.3); background-image: linear-gradient(to bottom, rgba(21, 243, 91, 0.1), rgba(0, 61, 123, 0.3)); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 8px; padding: 6px 10px; color: white; appearance: none; background-repeat: no-repeat; background-position: right 10px center; background-size: 12px; padding-right: 30px; cursor: pointer; }
+        select:focus { outline: none; border-color: #15f35b; box-shadow: 0 0 0 2px rgba(21, 243, 91, 0.3); }
+</style>
+</head>
+<body>
+<div class="slide-bg flex flex-col justify-start items-start p-6 text-white">
+<div class="accent-line"></div>
+<div class="absolute top-6 right-6">
+<img alt="Athospay Logo" class="h-14" src="https://athospay.github.io/teste/logocolorida.svg"/>
+</div>
+<div class="mb-3 z-10">
+<h1 class="text-4xl font-bold mb-1">Simulador de Split para Lucro Real</h1>
+<div class="h-1 w-40 bg-gradient-to-r from-green-400 to-blue-500 mt-1" style="background: linear-gradient(90deg, #15f35b 0%, #1599ff 100%);"></div>
+</div>
+<div class="w-full grid grid-cols-12 gap-4 z-10">
+<div class="col-span-5">
+<div class="simulator-card p-4 h-full">
+<div class="mb-3">
+<label class="block text-blue-200 mb-1">Faturamento Mensal (R$):</label>
+<p class="text-xl font-bold mb-1" id="faturamento-value">R$ 1.000.000,00</p>
+<input class="w-full" id="faturamento-slider" max="10000000" min="50000" step="10000" type="range" value="1000000"/>
+<div class="flex justify-between text-xs text-blue-200">
+<span>R$ 50 mil</span>
+<span>R$ 10 milhões</span>
+</div>
+<p class="slider-label">Ajuste o valor arrastando o controle deslizante</p>
+</div>
+<div class="mb-3">
+<label class="block text-blue-200 mb-1">Margem de Lucro:</label>
+<p class="text-xl font-bold mb-1" id="margem-value">10,00%</p>
+<input class="w-full" id="margem-slider" max="80" min="0" step="1" type="range" value="10"/>
+<div class="flex justify-between text-xs text-blue-200">
+<span>0%</span>
+<span>80%</span>
+</div>
+<p class="slider-label">Percentual de lucro sobre o faturamento</p>
+</div>
+<div class="mb-3">
+<label class="block text-blue-200 mb-1">Percentual de Repasse a Terceiros:</label>
+<p class="text-xl font-bold mb-1" id="repasse-value">50,00%</p>
+<input class="w-full" id="repasse-slider" max="90" min="0" step="1" type="range" value="50"/>
+<div class="flex justify-between text-xs text-blue-200">
+<span>0%</span>
+<span>90%</span>
+</div>
+<p class="slider-label">Parceiros, fornecedores, terceirizados, royalties, etc.</p>
+</div>
+<div class="mb-2">
+<label class="block text-blue-200 mb-1">Créditos de PIS/COFINS:</label>
+<div class="flex items-center">
+<span class="text-sm text-blue-200 mr-2">Sem créditos</span>
+<label class="toggle-switch mx-2">
+<input checked="" id="creditos-toggle" type="checkbox"/>
+<span class="slider"></span>
+</label>
+<span class="text-sm text-blue-200 ml-2">Com créditos</span>
+</div>
+<p class="slider-label">Aproveitamento de créditos de PIS/COFINS (média 25%)</p>
+</div>
+<div class="mt-2 p-2 bg-blue-900 bg-opacity-20 rounded-lg">
+<p class="text-xs text-blue-200">O simulador estima a economia com base nas alíquotas do Lucro Real e no percentual de repasse.</p>
+</div>
+</div>
+</div>
+<div class="col-span-7">
+<div class="simulator-card p-4 h-full">
+<h2 class="text-2xl font-semibold mb-3 text-green-300">Resultados da Simulação</h2>
+<div class="grid grid-cols-2 gap-3 mb-3">
+<div class="result-card p-3">
+<p class="text-sm text-blue-200 mb-0.5">Carga Tributária Original:</p>
+<p class="text-2xl font-bold text-white" id="carga-original">14,44%</p>
+<p class="text-xs text-blue-200 mt-0.5">IRPJ + CSLL + PIS + COFINS</p>
+</div>
+<div class="result-card p-3">
+<p class="text-sm text-blue-200 mb-0.5">Carga Tributária com Split:</p>
+<p class="text-2xl font-bold text-green-400" id="carga-ajustada">6,72%</p>
+<p class="text-xs text-green-300 mt-0.5">Redução em <span id="reducao-percentual">53,46%</span></p>
+</div>
+<div class="result-card p-3">
+<p class="text-sm text-blue-200 mb-0.5">Economia Mensal:</p>
+<p class="text-2xl font-bold text-green-400" id="economia-mensal">R$ 15.437,50</p>
+<p class="text-xs text-green-300 mt-0.5">Valor preservado mensalmente</p>
+</div>
+<div class="result-card p-3">
+<p class="text-sm text-blue-200 mb-0.5">Economia em 12 meses:</p>
+<p class="text-2xl font-bold text-green-400" id="economia-anual">R$ 185.250,00</p>
+<p class="text-xs text-green-300 mt-0.5">Impacto total anual no seu negócio</p>
+</div>
+</div>
+<div class="mt-2">
+<p class="text-base font-semibold mb-1 text-blue-200">Comparação de Cenários:</p>
+<div class="chart-container">
+<canvas height="250" id="tax-chart" width="822"></canvas>
+</div>
+</div>
+<div class="mt-2 bg-gradient-to-r from-blue-900 to-blue-800 p-2 rounded-lg">
+<p class="font-semibold flex items-center">
+<i class="fas fa-chart-line text-green-300 mr-2"></i>
+                            Ideal para empresas de maior volume: economize até <span class="text-green-300 text-xl ml-1" id="reducao-destaque">53,46%</span> da carga tributária!
+                        </p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<script>
+        const taxConfig = { irpj: 0.15, irpj_adicional: 0.10, irpj_limite_adicional_mensal: 20000, csll: 0.09, pis: 0.0165, cofins: 0.076, creditos_piscofins: 0.25 };
+        function formatCurrency(value) { return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL', minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(value); }
+        function formatPercentage(value) { return (value * 100).toFixed(2).replace('.', ',') + '%'; }
+        let taxChart;
+        function initChart() {
+            const ctx = document.getElementById('tax-chart').getContext('2d');
+            if (taxChart) taxChart.destroy();
+            taxChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Sem Split', 'Com Split'],
+                    datasets: [
+                        { label: 'IRPJ', data: [7500, 3750], backgroundColor: 'rgba(255, 99, 132, 0.7)', borderColor: 'rgba(255, 99, 132, 1)', borderWidth: 1 },
+                        { label: 'CSLL', data: [2250, 1125], backgroundColor: 'rgba(255, 159, 64, 0.7)', borderColor: 'rgba(255, 159, 64, 1)', borderWidth: 1 },
+                        { label: 'PIS', data: [1237.5, 618.75], backgroundColor: 'rgba(75, 192, 192, 0.7)', borderColor: 'rgba(75, 192, 192, 1)', borderWidth: 1 },
+                        { label: 'COFINS', data: [5700, 2850], backgroundColor: 'rgba(54, 162, 235, 0.7)', borderColor: 'rgba(54, 162, 235, 1)', borderWidth: 1 }
+                    ]
+                },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: true, position: 'bottom', labels: { color: 'rgba(255, 255, 255, 0.8)', font: { size: 10 }, boxWidth: 12 } }, tooltip: { callbacks: { label: function(context) { let label = context.dataset.label || ''; if (label) { label += ': '; } label += formatCurrency(context.parsed.y); return label; } } } }, scales: { x: { stacked: true, grid: { display: false }, ticks: { color: 'rgba(255, 255, 255, 0.8)' } }, y: { stacked: true, beginAtZero: true, grid: { color: 'rgba(255, 255, 255, 0.1)' }, ticks: { color: 'rgba(255, 255, 255, 0.8)', callback: function(value) { return formatCurrency(value); } } } }, animation: { duration: 500 } }
+            });
+        }
+        function calculateSimulation() {
+            const faturamento = parseFloat(document.getElementById('faturamento-slider').value);
+            const margemLucro = parseFloat(document.getElementById('margem-slider').value) / 100;
+            const percentualRepasse = parseFloat(document.getElementById('repasse-slider').value) / 100;
+            const creditosPiscofins = document.getElementById('creditos-toggle').checked;
+            
+            const lucro = faturamento * margemLucro;
+            let irpjValue = lucro * taxConfig.irpj;
+            if (lucro > taxConfig.irpj_limite_adicional_mensal) { irpjValue += (lucro - taxConfig.irpj_limite_adicional_mensal) * taxConfig.irpj_adicional; }
+            const csllValue = lucro * taxConfig.csll;
+            let pisValue, cofinsValue;
+            if (creditosPiscofins) { pisValue = faturamento * taxConfig.pis * (1 - taxConfig.creditos_piscofins); cofinsValue = faturamento * taxConfig.cofins * (1 - taxConfig.creditos_piscofins); } else { pisValue = faturamento * taxConfig.pis; cofinsValue = faturamento * taxConfig.cofins; }
+            const totalTaxes = irpjValue + csllValue + pisValue + cofinsValue;
+            
+            const faturamentoEfetivo = faturamento * (1 - percentualRepasse);
+            const lucroEfetivo = faturamentoEfetivo * margemLucro;
+            let irpjValueSplit = lucroEfetivo * taxConfig.irpj;
+            if (lucroEfetivo > taxConfig.irpj_limite_adicional_mensal) { irpjValueSplit += (lucroEfetivo - taxConfig.irpj_limite_adicional_mensal) * taxConfig.irpj_adicional; }
+            const csllValueSplit = lucroEfetivo * taxConfig.csll;
+            let pisValueSplit, cofinsValueSplit;
+            if (creditosPiscofins) { pisValueSplit = faturamentoEfetivo * taxConfig.pis * (1 - taxConfig.creditos_piscofins); cofinsValueSplit = faturamentoEfetivo * taxConfig.cofins * (1 - taxConfig.creditos_piscofins); } else { pisValueSplit = faturamentoEfetivo * taxConfig.pis; cofinsValueSplit = faturamentoEfetivo * taxConfig.cofins; }
+            const totalTaxesSplit = irpjValueSplit + csllValueSplit + pisValueSplit + cofinsValueSplit;
+            
+            const economiaMensal = totalTaxes - totalTaxesSplit;
+            const economiaAnual = economiaMensal * 12;
+            const cargaOriginal = totalTaxes / faturamento;
+            const cargaAjustada = totalTaxesSplit / faturamento;
+            const reducaoPercentual = (totalTaxes - totalTaxesSplit) / totalTaxes;
+            
+            document.getElementById('carga-original').textContent = formatPercentage(cargaOriginal);
+            document.getElementById('carga-ajustada').textContent = formatPercentage(cargaAjustada);
+            document.getElementById('economia-mensal').textContent = formatCurrency(economiaMensal);
+            document.getElementById('economia-anual').textContent = formatCurrency(economiaAnual);
+            document.getElementById('reducao-percentual').textContent = formatPercentage(reducaoPercentual);
+            document.getElementById('reducao-destaque').textContent = formatPercentage(reducaoPercentual);
+            
+            if (taxChart) {
+                taxChart.data.datasets[0].data = [irpjValue, irpjValueSplit];
+                taxChart.data.datasets[1].data = [csllValue, csllValueSplit];
+                taxChart.data.datasets[2].data = [pisValue, pisValueSplit];
+                taxChart.data.datasets[3].data = [cofinsValue, cofinsValueSplit];
+                taxChart.update();
+            }
+        }
+        document.addEventListener('DOMContentLoaded', function() {
+            initChart();
+            document.getElementById('faturamento-slider').value = 1000000;
+            document.getElementById('faturamento-value').textContent = formatCurrency(1000000);
+            document.getElementById('margem-slider').value = 10;
+            document.getElementById('margem-value').textContent = "10,00%";
+            document.getElementById('repasse-slider').value = 50;
+            document.getElementById('repasse-value').textContent = "50,00%";
+            document.getElementById('creditos-toggle').checked = true;
+            
+            document.getElementById('faturamento-slider').addEventListener('input', function() { document.getElementById('faturamento-value').textContent = formatCurrency(parseFloat(this.value)); calculateSimulation(); });
+            document.getElementById('margem-slider').addEventListener('input', function() { document.getElementById('margem-value').textContent = (parseFloat(this.value)).toFixed(2).replace('.', ',') + '%'; calculateSimulation(); });
+            document.getElementById('repasse-slider').addEventListener('input', function() { document.getElementById('repasse-value').textContent = (parseFloat(this.value)).toFixed(2).replace('.', ',') + '%'; calculateSimulation(); });
+            document.getElementById('creditos-toggle').addEventListener('change', calculateSimulation);
+            calculateSimulation();
+        });
+    <\/script>
+</body>
+</html>`;
+
+                // --- STREAMING_CHUNK:Aplicando auto-scale aos iframes... ---
+                // Função de limpeza e injeção do auto-scaling para garantir ajuste perfeito nos iframes
+                const processSlide = (htmlContent) => {
+                    const scaleScript = `
+                    <style>body{background:#e5e7eb; overflow:hidden; margin:0;}</style>
+                    <script>
+                        function scaleSlide() {
+                            const bg = document.querySelector('.slide-bg');
+                            if(!bg) return;
+                            const scale = Math.min(window.innerWidth / 1280, window.innerHeight / 720);
+                            bg.style.transform = 'scale(' + scale + ')';
+                            bg.style.transformOrigin = 'center center';
+                            bg.style.position = 'absolute';
+                            bg.style.left = '50%';
+                            bg.style.top = '50%';
+                            bg.style.marginLeft = '-640px';
+                            bg.style.marginTop = '-360px';
+                        }
+                        window.addEventListener('resize', scaleSlide);
+                        document.addEventListener('DOMContentLoaded', scaleSlide);
+                    <\/script>
+                    `;
+                    return htmlContent.replace('</body>', scaleScript + '</body>');
+                };
+
+                onMounted(() => {
+                    // Injetar os 4 slides processados na array reativa
+                    slides.value = [
+                        { id: 1, content: processSlide(slide1Raw) },
+                        { id: 2, content: processSlide(slide2Raw) },
+                        { id: 3, content: processSlide(slide3Raw) },
+                        { id: 4, content: processSlide(slide4Raw) }
+                    ];
+
+                    nextTick(() => {
+                        if (typeof feather !== 'undefined') feather.replace();
+                    });
+                    document.addEventListener('keydown', handleKeydown);
+                });
+
+                // --- FUNÇÕES DE NAVEGAÇÃO E ATALHOS ---
+                const nextSlide = () => {
+                    if (currentSlideIndex.value < slides.value.length - 1) {
+                        isLoadingSlide.value = true;
+                        currentSlideIndex.value++;
+                        setTimeout(() => isLoadingSlide.value = false, 300);
+                        updateIcons();
+                    }
+                };
+
+                const prevSlide = () => {
+                    if (currentSlideIndex.value > 0) {
+                        isLoadingSlide.value = true;
+                        currentSlideIndex.value--;
+                        setTimeout(() => isLoadingSlide.value = false, 300);
+                        updateIcons();
+                    }
+                };
+
+                const updateIcons = () => {
+                    nextTick(() => {
+                        if (typeof feather !== 'undefined') feather.replace();
+                    });
+                };
+
+                const handleKeydown = (e) => {
+                    if(e.key === 'ArrowRight' || e.key === 'ArrowDown') nextSlide();
+                    if(e.key === 'ArrowLeft' || e.key === 'ArrowUp') prevSlide();
+                };
+
+                return {
+                    slides, 
+                    currentSlideIndex, 
+                    isLoadingSlide,
+                    nextSlide, 
+                    prevSlide
+                };
+            }
+        }).mount('#app');
     </script>
 </body>
 </html>
